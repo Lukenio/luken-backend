@@ -1,30 +1,25 @@
 sudo: required
 language: python
 services:
-  - docker
+- docker
 python:
-  - "3.6"
+- '3.6'
 before_script:
-  - docker-compose build
+- docker-compose build
 script:
-  - docker-compose run --rm web bash -c "flake8 . &&
-                                         python wait_for_postgres.py &&
-                                         ./manage.py test"
-
+- docker-compose run --rm web bash -c "flake8 . && python wait_for_postgres.py &&
+  ./manage.py test"
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker login --username=_ --password="$HEROKU_AUTH_TOKEN" registry.heroku.com;
-    docker tag web registry.heroku.com/luken-prod/web;
-    docker push registry.heroku.com/luken-prod/web;
-    fi
-  - if [ "$TRAVIS_BRANCH" == "qa" ]; then
-    docker login --username=_ --password="$HEROKU_AUTH_TOKEN" registry.heroku.com;
-    docker tag web registry.heroku.com/luken-qa/web;
-    docker push registry.heroku.com/luken-qa/web;
-    fi
-
+- if [ "$TRAVIS_BRANCH" == "master" ]; then docker login --username=_ --password="$HEROKU_AUTH_TOKEN"
+  registry.heroku.com; docker tag web registry.heroku.com/luken-prod/web; docker push
+  registry.heroku.com/luken-prod/web; fi
+- if [ "$TRAVIS_BRANCH" == "qa" ]; then docker login --username=_ --password="$HEROKU_AUTH_TOKEN"
+  registry.heroku.com; docker tag web registry.heroku.com/luken-qa/web; docker push
+  registry.heroku.com/luken-qa/web; fi
 notifications:
   email: false
-
 cache:
   pip: true
+env:
+  global:
+    secure: RL48lrvcN7kr25r78gH/5YCDTwYB/v/K+fY1txKf3tkpzEnnVl5SIVat9i2BHzLAEd5Do0HBSsfSaX6w5mPSl0aTrioWdfhZ/sREyWcGBWyVmHxwl5t2rx9eoAmR8nw1zYNCSeHP05Dg4SfFwem2kOcJUhguVrg7e/XLm7GWgPWJscX9Ak185uxWFZmkGSXRndFYoAazUHzLQr/wJSP4mZxxWXNIenCAveh3lfEzhLkJd0vIjtPqaVraXfGQuxTAUlILliSGtiBqicq51LeuhXF0UfpWpGFaf4EXUjfbEEzQsN7vf2E/nLAlFTL4DKZMq6/+t9LY/VhuhcbGEs6mXUd6qBNUncsMTYgBwFR+HXSfNvazZcwIbQx6zjqeBaEq8Ij0bzhWTTKixjAFCNLm06cpNfhnX0rHK8tO/An1V/njqd4VdeEZB9eHij1OJiKU1wn3ZMi7b9aLQTtkQbedtV1g92pPzcNEztsuYWmy29Vwd9we3NHRqL+GXkSk6YHQ2KgWk0OubqJ5HhKwKL+jX7ZYC/SVZti1SJMUYPGwtz/qC5fVXQfnesSqCQIM2Z3IYYvsBLsKr9zUCfs1EyRN0TDYx4zg9J4I92DXLmh2moz5jCUArzXG97Og8fiW2nhteMOYlgTsBnxP9oJdWYldK+cKblUkA69iXRfAbvWyr9I=
