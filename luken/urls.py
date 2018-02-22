@@ -10,20 +10,15 @@ from rest_framework_swagger.views import get_swagger_view
 
 schema_view = get_swagger_view(title='Luken API')
 
-router = DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'users', UserCreateViewSet)
-
 
 api_urlpatterns = [
     path('accounts/', include('rest_registration.api.urls')),
-    path('api/v1/', include(router.urls)),
 ]
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(api_urlpatterns)),
+    path('api/v1/', include(api_urlpatterns)),
     # path('api-token-auth/', views.obtain_auth_token),
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api-docs/', schema_view),
