@@ -7,15 +7,21 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
 from .users.views import UserViewSet, UserCreateViewSet
 
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='Luken API')
+
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'users', UserCreateViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('rest_registration.api.urls')),
     path('api/v1/', include(router.urls)),
-    path('api-token-auth/', views.obtain_auth_token),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    # path('api-token-auth/', views.obtain_auth_token),
+    # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api-docs/', schema_view),
 
     # the 'api-root' from django rest-frameworks default router
     # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter

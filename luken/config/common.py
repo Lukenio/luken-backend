@@ -21,6 +21,8 @@ class Common(Configuration):
         'rest_framework',            # utilities for rest apis
         'rest_framework.authtoken',  # token authentication
         'django_filters',            # for filtering rest endpoints
+        'rest_registration',         # for registration and login endpoints
+        'rest_framework_swagger',    # API documentation app
 
         # Your apps
         'luken.users',
@@ -199,3 +201,22 @@ class Common(Configuration):
             'rest_framework.authentication.TokenAuthentication',
         )
     }
+
+    REST_REGISTRATION = {
+        'REGISTER_VERIFICATION_ENABLED': False,
+
+        'RESET_PASSWORD_VERIFICATION_URL': '/reset-password/',
+
+        'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
+
+        'VERIFICATION_FROM_EMAIL': 'no-reply@example.com',
+    }
+
+    SWAGGER_SETTINGS = {
+        'SECURITY_DEFINITIONS': {
+            'basic': {
+                'type': 'basic'
+            }
+        }
+    }
+
