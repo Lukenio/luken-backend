@@ -1,10 +1,20 @@
 import os
+
 from .common import Common
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class Local(Common):
     DEBUG = True
+
+    SECRET_KEY = "local"
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'local.db',
+        }
+    }
 
     # Testing
     INSTALLED_APPS = Common.INSTALLED_APPS
