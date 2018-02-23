@@ -24,7 +24,6 @@ class LoginViewTestCase(BaseLoginTestCase):
         })
         self.add_session_to_request(request)
         response = self.view_func(request)
-        print(response.body)
         self.assert_valid_response(response, status.HTTP_200_OK)
 
     @override_settings(

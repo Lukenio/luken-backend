@@ -13,10 +13,10 @@ class ChangePasswordTestCase(APIViewTestCase):
         self.user = self.create_test_user(username='albert.einstein',
                                           password=self.password)
 
-    def test_forbidden(self):
+    def test_UNAUTHORIZED(self):
         request = self.create_post_request({})
         response = self.view_func(request)
-        self.assert_invalid_response(response, status.HTTP_403_FORBIDDEN)
+        self.assert_invalid_response(response, status.HTTP_401_UNAUTHORIZED)
 
     def _test_authenticated(self, data):
         request = self.create_post_request(data)

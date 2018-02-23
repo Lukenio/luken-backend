@@ -1,6 +1,7 @@
 import math
 import time
 from unittest.mock import patch
+from uuid import UUID
 
 from django.test.utils import override_settings
 from rest_framework import status
@@ -65,7 +66,7 @@ class RegisterEmailViewTestCase(BaseRegisterEmailViewTestCase):
             expected_query_keys={'signature', 'user_id', 'timestamp', 'email'},
         )
         self.assertEqual(verification_data['email'], self.new_email)
-        self.assertEqual(int(verification_data['user_id']), self.user.id)
+        self.assertEqual(UUID(verification_data['user_id']), self.user.id)
         url_sig_timestamp = int(verification_data['timestamp'])
         self.assertGreaterEqual(url_sig_timestamp, time_before)
         self.assertLessEqual(url_sig_timestamp, time_after)

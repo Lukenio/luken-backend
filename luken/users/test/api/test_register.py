@@ -1,6 +1,7 @@
 import math
 import time
 from unittest.mock import patch
+from uuid import UUID
 
 from django.test.utils import override_settings
 from rest_framework import status
@@ -83,7 +84,7 @@ class RegisterViewTestCase(APIViewTestCase):
             expected_path=REGISTER_VERIFICATION_URL,
             expected_query_keys={'signature', 'user_id', 'timestamp'},
         )
-        url_user_id = int(verification_data['user_id'])
+        url_user_id = verification_data['user_id']
         self.assertEqual(url_user_id, user_id)
         url_sig_timestamp = int(verification_data['timestamp'])
         self.assertGreaterEqual(url_sig_timestamp, time_before)
@@ -123,7 +124,7 @@ class RegisterViewTestCase(APIViewTestCase):
             expected_path=REGISTER_VERIFICATION_URL,
             expected_query_keys={'signature', 'user_id', 'timestamp'},
         )
-        url_user_id = int(verification_data['user_id'])
+        url_user_id = verification_data['user_id']
         self.assertEqual(url_user_id, user_id)
         url_sig_timestamp = int(verification_data['timestamp'])
         self.assertGreaterEqual(url_sig_timestamp, time_before)
