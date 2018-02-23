@@ -1,7 +1,6 @@
 import math
 import time
 from unittest.mock import patch
-from uuid import UUID
 
 from django.test.utils import override_settings
 from rest_framework import status

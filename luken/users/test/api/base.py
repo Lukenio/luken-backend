@@ -78,9 +78,7 @@ class APIViewTestCase(TestCase):
         status_code = response.status_code
         status_valid = (200 <= status_code < 400)
         msg_format = "Response returned with code {status_code}, body {response.data}"  # noqa: E501
-        msg = msg_format.format(
-                status_code=status_code,
-                response=response)
+        msg = msg_format.format(status_code=status_code, response=response)
         if expected_valid_response:
             self.assertTrue(status_valid, msg)
         else:
