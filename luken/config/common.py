@@ -23,6 +23,7 @@ class Common(Configuration):
         'django_filters',            # for filtering rest endpoints
         'rest_registration',         # for registration and login endpoints
         'rest_framework_swagger',    # API documentation app
+        'anymail',                   # sending mails api
 
         # Your apps
         'luken.users',

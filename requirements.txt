@@ -38,3 +38,6 @@ django-dynamic-fixture==2.0.0
 # Static and Media Storage
 django-storages==1.6.5
 boto3==1.5.31
+
+# External services
+django-anymail[mailgun]==1.4
