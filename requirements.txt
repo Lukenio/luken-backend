@@ -7,6 +7,7 @@ newrelic==2.102.0.85
 
 # For the persistence stores
 psycopg2==2.7.4
+psycopg2-binary==2.7.4
 dj-database-url==0.4.2
 
 # Model Tools
@@ -32,6 +33,7 @@ factory-boy==2.10.0
 django-nose==1.4.5
 nose-progressive==1.5.1
 coverage==4.5.1
+django-dynamic-fixture==2.0.0
 
 # Static and Media Storage
 django-storages==1.6.5
