@@ -32,10 +32,9 @@ class Production(Common):
     }
     EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 
-    DEFAULT_FROM_EMAIL = "you@heroku.com"  # if you don't already have this in settings
+    DEFAULT_FROM_EMAIL = "you@herokuapp.com"
 
     ANYMAIL = {
-        # (exact settings here depend on your ESP...)
         "MAILGUN_API_KEY": os.getenv('MAILGUN_API_KEY'),
-        "MAILGUN_SENDER_DOMAIN": 'luken-qa.herokuapp.com', # your Mailgun domain, if needed
+        "MAILGUN_SENDER_DOMAIN": 'luken-qa.herokuapp.com'
     }
