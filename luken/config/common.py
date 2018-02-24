@@ -200,11 +200,11 @@ class Common(Configuration):
     }
 
     REST_REGISTRATION = {
-        'REGISTER_VERIFICATION_ENABLED': False,
+        'REGISTER_VERIFICATION_ENABLED': True,
 
         'RESET_PASSWORD_VERIFICATION_URL': '/reset-password/',
 
-        'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
+        'REGISTER_EMAIL_VERIFICATION_ENABLED': True,
 
         'VERIFICATION_FROM_EMAIL': 'no-reply@example.com',
     }
