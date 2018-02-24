@@ -201,7 +201,7 @@ class Common(Configuration):
 
     REST_REGISTRATION = {
         'REGISTER_VERIFICATION_ENABLED': True,
-        "REGISTER_VERIFICATION_URL": "/verify-registration/",
+        "REGISTER_VERIFICATION_URL": "/verify-account/",
 
         'RESET_PASSWORD_VERIFICATION_URL': '/reset-password/',
 
