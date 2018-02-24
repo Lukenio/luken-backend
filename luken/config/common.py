@@ -201,12 +201,13 @@ class Common(Configuration):
 
     REST_REGISTRATION = {
         'REGISTER_VERIFICATION_ENABLED': True,
+        "REGISTER_VERIFICATION_URL": "/verify-registration/",
 
         'RESET_PASSWORD_VERIFICATION_URL': '/reset-password/',
 
         'REGISTER_EMAIL_VERIFICATION_ENABLED': True,
-
         'VERIFICATION_FROM_EMAIL': 'no-reply@example.com',
+        "REGISTER_EMAIL_VERIFICATION_URL": "/verify-email/",
     }
 
     SWAGGER_SETTINGS = {
