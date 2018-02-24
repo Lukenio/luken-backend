@@ -27,7 +27,7 @@ class Common(Configuration):
 
         # Your apps
         'luken.users',
-
+        "luken.coins",
     )
 
     # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
@@ -201,12 +201,13 @@ class Common(Configuration):
 
     REST_REGISTRATION = {
         'REGISTER_VERIFICATION_ENABLED': True,
+        "REGISTER_VERIFICATION_URL": "/verify-account/",
 
         'RESET_PASSWORD_VERIFICATION_URL': '/reset-password/',
 
         'REGISTER_EMAIL_VERIFICATION_ENABLED': True,
-
         'VERIFICATION_FROM_EMAIL': 'no-reply@example.com',
+        "REGISTER_EMAIL_VERIFICATION_URL": "/verify-email/",
     }
 
     SWAGGER_SETTINGS = {
