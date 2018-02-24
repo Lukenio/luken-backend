@@ -27,7 +27,7 @@ class Common(Configuration):
 
         # Your apps
         'luken.users',
-
+        "luken.coins",
     )
 
     # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
