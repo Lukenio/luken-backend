@@ -36,5 +36,5 @@ class Production(Common):
 
     ANYMAIL = {
         "MAILGUN_API_KEY": os.getenv('MAILGUN_API_KEY'),
-        "MAILGUN_SENDER_DOMAIN": 'sandboxe068fc4e8d534b98b83531928c3cfe07.mailgun.org'
+        "MAILGUN_SENDER_DOMAIN": 'sandbox501c49d7fb8740899eb08186177ba399.mailgun.org'
     }
