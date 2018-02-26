@@ -3,15 +3,20 @@ from django.urls import path, re_path, include, reverse_lazy
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic.base import RedirectView
+from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
 
 from luken.coins.urls import coins_router
 
 schema_view = get_swagger_view(title='Luken API')
 
+api = DefaultRouter()
+api.registry.extend(coins_router.registry)
+
 api_urlpatterns = [
     path('accounts/', include('rest_registration.api.urls')),
-] + coins_router.urls
+    path("", include(api.urls)),
+]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
