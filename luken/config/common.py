@@ -217,7 +217,9 @@ class Common(Configuration):
     SWAGGER_SETTINGS = {
         'SECURITY_DEFINITIONS': {
             'basic': {
-                'type': 'basic'
+                'type': 'apiKey',
+                'in': 'header',
+                'name': 'Authorization'
             }
         }
     }

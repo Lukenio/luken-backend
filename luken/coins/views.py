@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny
 
 from .models import CoinAccount
 from .permissions import OwnerOnly
+from rest_framework.permissions import IsAuthenticated
 from .serializers import CoinAccountSerializer
 
 
@@ -20,10 +21,10 @@ class CoinAccountViewSet(
     """
     queryset = CoinAccount.objects.all()
     serializer_class = CoinAccountSerializer
-    permission_classes = (OwnerOnly, )
+    permission_classes = (OwnerOnly, IsAuthenticated)
 
 
 class CreateCoinAccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = CoinAccount.objects.all()
     serializer_class = CoinAccountSerializer
-    permission_classes = (AllowAny, )
+    permission_classes = (AllowAny, IsAuthenticated)
