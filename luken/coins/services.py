@@ -6,13 +6,6 @@ class CoinBackendBase:
     support for any coin.
     """
 
-    def create_wallet(self, user_id):
-        """
-        :param user_id:
-        :return: returns generic wallet instance
-        """
-        raise NotImplemented()
-
     def get_pubkey(self):
         return
 
