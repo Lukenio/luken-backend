@@ -9,4 +9,4 @@ class CoinAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = CoinAccount
         fields = "__all__"
-        read_only_fields = ("created", "updated", "user", )
+        read_only_fields = ("created", "updated", "user", "vault_id", "pub_address")

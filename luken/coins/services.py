@@ -13,7 +13,7 @@ class CoinBackendBase:
         return
 
     def get_address(self, name):
-        return 'some hash going to be returned here'
+        return '1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2'
 
 
 class BitcoinBackend(CoinBackendBase):
