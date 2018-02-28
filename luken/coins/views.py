@@ -10,13 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import CoinAccountSerializer
 
 
-class CoinAccountViewSet(
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-    mixins.ListModelMixin,
-    viewsets.GenericViewSet,
-):
+class CoinAccountViewSet(viewsets.ModelViewSet):
     """
     CRUD operations for Coin Accounts.
     """
@@ -25,7 +19,7 @@ class CoinAccountViewSet(
     permission_classes = (OwnerOnly, IsAuthenticated)
 
 
-class CreateCoinAccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
-    queryset = CoinAccount.objects.all()
-    serializer_class = CoinAccountSerializer
-    permission_classes = (AllowAny, IsAuthenticated)
+# class CreateCoinAccountViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+#     queryset = CoinAccount.objects.all()
+#     serializer_class = CoinAccountSerializer
+#     permission_classes = (AllowAny, IsAuthenticated)
