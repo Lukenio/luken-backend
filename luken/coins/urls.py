@@ -1,10 +1,6 @@
 from rest_framework.routers import SimpleRouter
 
-from .views import (
-    CoinAccountViewSet,
-    CreateCoinAccountViewSet
-)
+from .views import CoinAccountViewSet
 
 coins_router = SimpleRouter()
 coins_router.register("coin-accounts", CoinAccountViewSet, base_name="coin-accounts")
-coins_router.register("coin-accounts", CreateCoinAccountViewSet, base_name="coin-accounts")
