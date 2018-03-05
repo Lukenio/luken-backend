@@ -1,0 +1,1 @@
+You've applied for loan for {{ loan.loaned_amount }}.
