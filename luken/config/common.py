@@ -24,6 +24,7 @@ class Common(Configuration):
         'rest_registration',         # for registration and login endpoints
         'rest_framework_swagger',    # API documentation app
         'anymail',                   # sending mails api
+        'corsheaders',               # disable cors during development stage
 
         # Your apps
         'luken.users',
@@ -31,9 +32,12 @@ class Common(Configuration):
         "luken.loan",
     )
 
+    CORS_ORIGIN_ALLOW_ALL = True
+
     # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
     MIDDLEWARE = (
         'django.middleware.security.SecurityMiddleware',
+        'corsheaders.middleware.CorsMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
@@ -214,7 +218,9 @@ class Common(Configuration):
     SWAGGER_SETTINGS = {
         'SECURITY_DEFINITIONS': {
             'basic': {
-                'type': 'basic'
+                'type': 'apiKey',
+                'in': 'header',
+                'name': 'Authorization'
             }
         }
     }

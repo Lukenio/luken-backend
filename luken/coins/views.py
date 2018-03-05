@@ -7,6 +7,7 @@ from luken.utils.views import PermissionByActionMixin
 
 from .models import CoinAccount
 from .permissions import OwnerOnly
+from rest_framework.permissions import IsAuthenticated
 from .serializers import CoinAccountSerializer
 
 

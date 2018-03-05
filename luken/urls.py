@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.views.generic.base import RedirectView
 from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
+from rest_framework.authtoken import views
 
 from luken.coins.urls import coins_router
 from luken.loan.urls import loan_router
@@ -17,13 +18,13 @@ api.registry.extend(loan_router.registry)
 
 api_urlpatterns = [
     path('accounts/', include('rest_registration.api.urls')),
+    path('api-token-auth/', views.obtain_auth_token),
     path("", include(api.urls)),
 ]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(api_urlpatterns)),
-    # path('api-token-auth/', views.obtain_auth_token),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api-docs/', schema_view),
 
