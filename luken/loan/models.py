@@ -1,10 +1,7 @@
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.db import models
-from django.template import (
-    loader,
-    Context,
-)
+from django.template import loader
 
 
 plaintext = loader.get_template("loan/email.txt")
