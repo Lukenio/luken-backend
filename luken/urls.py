@@ -8,11 +8,13 @@ from rest_framework_swagger.views import get_swagger_view
 from rest_framework.authtoken import views
 
 from luken.coins.urls import coins_router
+from luken.loan.urls import loan_router
 
 schema_view = get_swagger_view(title='Luken API')
 
 api = DefaultRouter()
 api.registry.extend(coins_router.registry)
+api.registry.extend(loan_router.registry)
 
 api_urlpatterns = [
     path('accounts/', include('rest_registration.api.urls')),

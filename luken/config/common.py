@@ -29,6 +29,7 @@ class Common(Configuration):
         # Your apps
         'luken.users',
         "luken.coins",
+        "luken.loan",
     )
 
     CORS_ORIGIN_ALLOW_ALL = True
