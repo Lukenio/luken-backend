@@ -1,41 +1,27 @@
 from rest_framework import (
     viewsets,
-    mixins,
     permissions,
 )
 
 from luken.coins.permissions import OwnerOnly
+from luken.utils.views import PermissionByActionMixin
 
 from .models import LoanApplication
-from .serializers import (
-    LoanApplicationSerializer,
-    CreateLoanApplicationSerializer
-)
+from .serializers import LoanApplicationSerializer
 
 
-class LoanApplicationViewSet(
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-    viewsets.GenericViewSet,
-):
+class LoanApplicationViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
     """
     RUD operations for Loan Applications.
     """
-    permission_classes = (permissions.IsAuthenticated, OwnerOnly, )
+    permission_classes_by_action = {
+        "create": [permissions.AllowAny],
+        "default": [OwnerOnly],
+    }
     serializer_class = LoanApplicationSerializer
 
     def get_queryset(self):
-        return LoanApplication.objects.filter(user=self.request.user)
-
-
-class CreateLoanApplicationViewSet(
-    mixins.CreateModelMixin,
-    viewsets.GenericViewSet,
-):
-    """
-    Create op for Loan Applications.
-    """
-    queryset = LoanApplication.objects.all()
-    serializer_class = CreateLoanApplicationSerializer
-    permission_classes = (permissions.AllowAny, )
+        if self.request.user.is_authenticated:
+            return self.request.user.loan_applications.all()
+        else:
+            return LoanApplication.objects.none()

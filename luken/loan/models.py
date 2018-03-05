@@ -24,13 +24,16 @@ class LoanApplication(models.Model):
         (2, "Approved"),
     )
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="loan_applications",
+        on_delete=models.PROTECT, null=True
+    )
     email = models.EmailField(blank=True)
     loaned_amount = models.DecimalField(decimal_places=2, max_digits=20)
     bitcoin_collateral = models.DecimalField(decimal_places=8, max_digits=20)
     bitcoin_price_usd = models.DecimalField(decimal_places=2, max_digits=20)
     terms_month = models.SmallIntegerField(choices=TERMS_MONTH_CHOICES)
-    state = models.SmallIntegerField(choices=STATE_CHOICES)
+    state = models.SmallIntegerField(choices=STATE_CHOICES, default=STATE_CHOICES[0][0])
 
     def __str__(self):
         return f"Loan Application - {self.user or self.email}"
@@ -40,7 +43,7 @@ class LoanApplication(models.Model):
         if not instance.email or not created:
             return
 
-        ctx = Context({"loan": instance})
+        ctx = {"loan": instance}
 
         text_content = plaintext.render(ctx)
         html_content = html.render(ctx)
@@ -48,7 +51,7 @@ class LoanApplication(models.Model):
         msg = EmailMultiAlternatives(
             "Mail about Loan Application",
             text_content,
-            "Loan Application mail sender (should be in settings, I guess)",
+            "loan-application@luken.com",
             [instance.email],
         )
         msg.attach_alternative(html_content, "text/html")

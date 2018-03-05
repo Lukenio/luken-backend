@@ -10,18 +10,21 @@ class LoanApplicationSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ("user", "state", "bitcoin_price_usd", )
 
-
-class CreateLoanApplicationSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
-
-    class Meta(LoanApplicationSerializer.Meta):
-        read_only_fields = ()
-
     def validate(self, attrs):
-        if not attrs["user"] and not attrs["email"]:
+        user = self.context["request"].user
+        user = user if user.is_authenticated else None
+        attrs["user"] = user
+
+        email = attrs.get("email")
+
+        if not user and not email:
             raise serializers.ValidationError("email should be specified for unauthenticated users")
 
-        if attrs["user"] and attrs["email"]:
+        if user and email:
             raise serializers.ValidationError("email should not be specified for authenticated users")
 
         return attrs
+
+    def create(self, validated_data):
+        validated_data["bitcoin_price_usd"] = 6000.0
+        return LoanApplication.objects.create(**validated_data)
