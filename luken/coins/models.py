@@ -7,8 +7,7 @@ from .services import get_coin_backend
 class CoinAccount(models.Model):
     TYPES = (
         (0, "Bitcoin"),
-        (1, "Bitcoin Cache"),
-        (2, "Litecoin"),
+        (1, "Etherium"),
     )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="coin_accounts")

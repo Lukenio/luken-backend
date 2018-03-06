@@ -37,7 +37,9 @@ class CreateCoinAccountTestCase(BaseLoanApplicationTestCase):
 
         self.base_loan_application = {
             "loaned_amount": 123.4,
-            "bitcoin_collateral": 1234.5,
+            "crypto_collateral": 1234.5,
+            "crypto_price_usd": 10000.0,
+            "crypto_type": LoanApplication.TYPES[1][0],
             "terms_month": LoanApplication.TERMS_MONTH_CHOICES[0][0],
         }
 

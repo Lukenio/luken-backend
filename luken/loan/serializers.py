@@ -8,7 +8,7 @@ class LoanApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = LoanApplication
         fields = "__all__"
-        read_only_fields = ("user", "state", "bitcoin_price_usd", )
+        read_only_fields = ("user", "state", "crypto_price_usd")
 
     def validate(self, attrs):
         user = self.context["request"].user
@@ -26,5 +26,5 @@ class LoanApplicationSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        validated_data["bitcoin_price_usd"] = 6000.0
+        validated_data["crypto_price_usd"] = 6000.0
         return LoanApplication.objects.create(**validated_data)

@@ -21,14 +21,20 @@ class LoanApplication(models.Model):
         (2, "Approved"),
     )
 
+    TYPES = (
+        (0, "Bitcoin"),
+        (1, "Etherium"),
+    )
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name="loan_applications",
         on_delete=models.PROTECT, null=True
     )
     email = models.EmailField(blank=True)
     loaned_amount = models.DecimalField(decimal_places=2, max_digits=20)
-    bitcoin_collateral = models.DecimalField(decimal_places=8, max_digits=20)
-    bitcoin_price_usd = models.DecimalField(decimal_places=2, max_digits=20)
+    crypto_collateral = models.DecimalField(decimal_places=8, max_digits=20)
+    crypto_price_usd = models.DecimalField(decimal_places=2, max_digits=20)
+    crypto_type = models.SmallIntegerField(choices=TYPES)
     terms_month = models.SmallIntegerField(choices=TERMS_MONTH_CHOICES)
     state = models.SmallIntegerField(choices=STATE_CHOICES, default=STATE_CHOICES[0][0])
 

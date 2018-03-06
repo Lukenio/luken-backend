@@ -10,7 +10,14 @@ from rest_framework.authtoken.models import Token
 
 @python_2_unicode_compatible
 class User(AbstractUser):
+
+    USER_TYPES = [
+        ('lander', 'Lander'),
+        ('borrower', 'Borrower')
+    ]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    type = models.CharField(choices=USER_TYPES, max_length=10)
 
     def __str__(self):
         return self.username
