@@ -60,5 +60,16 @@ class LoanApplication(models.Model):
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
+    @classmethod
+    def connect_to_user_after_creation(cls, sender, instance, created, **kwargs):
+        if not created:
+            return
+
+        anonymous_loans = cls.objects.filter(user=None, email=instance.email)
+        for loan in anonymous_loans:
+            loan.user = instance
+            loan.save()
+
 
 models.signals.post_save.connect(LoanApplication.send_email, sender=LoanApplication)
+models.signals.post_save.connect(LoanApplication.connect_to_user_after_creation, sender=settings.AUTH_USER_MODEL)
