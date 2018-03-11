@@ -72,4 +72,7 @@ class LoanApplication(models.Model):
 
 
 models.signals.post_save.connect(LoanApplication.send_email, sender=LoanApplication)
-models.signals.post_save.connect(LoanApplication.connect_to_user_after_creation, sender=settings.AUTH_USER_MODEL)
+models.signals.post_save.connect(
+    LoanApplication.connect_to_user_after_creation,
+    sender=settings.AUTH_USER_MODEL
+)
