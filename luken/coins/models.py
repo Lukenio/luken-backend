@@ -1,13 +1,18 @@
 from django.conf import settings
 from django.db import models
 
-from .services import get_coin_backend
+from .services import (
+    get_coin_backend,
+    BITCOIN_TYPE,
+    ETHEREUM_TYPE,
+)
 
 
 class CoinAccount(models.Model):
+
     TYPES = (
-        (0, "Bitcoin"),
-        (1, "Etherium"),
+        (0, BITCOIN_TYPE),
+        (1, ETHEREUM_TYPE),
     )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="coin_accounts")
@@ -25,8 +30,28 @@ class CoinAccount(models.Model):
         if not self.pk:
             type_display = self.get_type_display()
 
-            coin_bakend = get_coin_backend(type_display.lower().replace(" ", ""))
+            coin_backend = get_coin_backend(type_display)
 
-            self.pub_address = coin_bakend().get_address(self.user.id)
+            self.pub_address = coin_backend.get_address(self.user.id)
 
         super().save(*args, **kwargs)
+
+    @classmethod
+    def assign_default_accounts_to_new_user(cls, sender, instance, created, **kwargs):
+        if not created:
+            return
+
+        for coin_account_type in cls.TYPES:
+            db_type, description = coin_account_type
+
+            cls.objects.create(
+                user=instance,
+                name=f"Default {description} account",
+                type=db_type,
+            )
+
+
+models.signals.post_save.connect(
+    CoinAccount.assign_default_accounts_to_new_user,
+    sender=settings.AUTH_USER_MODEL
+)
