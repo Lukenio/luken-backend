@@ -42,3 +42,4 @@ boto3==1.5.31
 
 # External services
 django-anymail[mailgun]==1.4
+coinmarketcap>=4.2,<4.3

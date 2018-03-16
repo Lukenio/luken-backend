@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from luken.utils.bitcoin_price import get_bitcoin_price
+
 from .models import LoanApplication
 
 
@@ -26,5 +28,5 @@ class LoanApplicationSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        validated_data["crypto_price_usd"] = 6000.0
+        validated_data["crypto_price_usd"] = get_bitcoin_price()
         return LoanApplication.objects.create(**validated_data)
