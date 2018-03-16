@@ -42,3 +42,8 @@ class CreateCoinAccountTestCase(BaseCoinAccountTestCase):
         force_authenticate(request, user=self.user)
         response = self.view.func(request)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_default_accounts_creation(self):
+        new_user = G(User)
+
+        self.assertEqual(CoinAccount.objects.filter(user=new_user).count(), len(CoinAccount.TYPES))
