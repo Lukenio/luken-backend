@@ -36,7 +36,6 @@ class CoinAccount(models.Model):
 
         super().save(*args, **kwargs)
 
-
     @classmethod
     def assign_default_accounts_to_new_user(cls, sender, instance, created, **kwargs):
         if not created:
