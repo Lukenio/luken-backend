@@ -115,3 +115,15 @@ class CreateCoinAccountTestCase(BaseLoanApplicationTestCase):
         self.assertGreater(len(first_user_loan_apps["results"]), 0)
         for app in first_user_loan_apps["results"]:
             self.assertTrue(app["id"] not in second_user_loan_app_ids)
+
+    def test_anon_loan_connection_to_newly_created_user(self):
+        request = self.factory.post(self.view_url, self.valid_unauthorized, format="json")
+        response = self.view.func(request)
+        response.render()
+
+        loan_app = json.loads(response.content)
+        db_loan_app = LoanApplication.objects.get(id=loan_app["id"])
+
+        bound_user = G(User, email=db_loan_app.email)
+        db_loan_app = LoanApplication.objects.get(id=loan_app["id"])
+        self.assertEqual(db_loan_app.user, bound_user)
