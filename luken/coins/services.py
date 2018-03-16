@@ -1,3 +1,5 @@
+BITCOIN_TYPE = "Bitcoin"
+ETHEREUM_TYPE = "Ethereum"
 
 
 class CoinBackendBase:
@@ -18,7 +20,14 @@ class CoinBackendBase:
 
 class BitcoinBackend(CoinBackendBase):
     """
-    Bitcoin bakend
+    Bitcoin backend
+    """
+    pass
+
+
+class EthereumBackend(CoinBackendBase):
+    """
+    Ethereum backend
     """
     pass
 
@@ -38,12 +47,12 @@ def get_coin_backend(coin_type):
     :param coin_type:
     :return:
     """
+    backends = {
+        BITCOIN_TYPE: BitcoinBackend,
+        ETHEREUM_TYPE: EthereumBackend,
+        "litecoin": LitecoinBackend,
+        "bitcoincache": BitCoinCash,
+    }
 
-    if coin_type == 'bitcoin':
-        return BitcoinBackend
-
-    if coin_type == 'litecoin':
-        return LitecoinBackend
-
-    if coin_type == 'bitcoincache':
-        return BitCoinCash
+    backend_class = backends[coin_type]
+    return backend_class()
