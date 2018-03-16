@@ -1,8 +1,17 @@
 from django.contrib import admin
 
-from .models import CoinAccount
+from .models import (
+    CoinAccount,
+    Transaction
+)
+
+
+class TransactionInline(admin.TabularInline):
+    model = Transaction
 
 
 @admin.register(CoinAccount)
 class UserAdmin(admin.ModelAdmin):
-    pass
+    inlines = [
+        TransactionInline,
+    ]
