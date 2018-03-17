@@ -91,7 +91,6 @@ class CreateCoinAccountTestCase(BaseLoanApplicationTestCase):
         db_loan_app = LoanApplication.objects.get(id=loan_app["id"])
 
         self.assertEqual(db_loan_app.email, self.valid_unauthorized["email"])
-        self.assertEqual(len(mail.outbox), 1)
 
     def test_list_displays_loan_applications_for_current_user_only(self):
         request = self.factory.post(self.view_url, self.valid_authorized, format="json")
@@ -122,8 +121,72 @@ class CreateCoinAccountTestCase(BaseLoanApplicationTestCase):
         response.render()
 
         loan_app = json.loads(response.content)
-        db_loan_app = LoanApplication.objects.get(id=loan_app["id"])
+        loan_app = LoanApplication.objects.get(id=loan_app["id"])
 
-        bound_user = G(User, email=db_loan_app.email)
-        db_loan_app = LoanApplication.objects.get(id=loan_app["id"])
-        self.assertEqual(db_loan_app.user, bound_user)
+        bound_user = G(User, email=loan_app.email)
+        loan_app.refresh_from_db()
+        self.assertEqual(loan_app.user, bound_user)
+
+    def test_creates_new_user_account_when_approved(self):
+        request = self.factory.post(self.view_url, self.valid_unauthorized, format="json")
+        response = self.view.func(request)
+
+        response.render()
+        loan_app = json.loads(response.content)
+        loan_app = LoanApplication.objects.get(id=loan_app["id"])
+
+        # import pdb; pdb.set_trace()
+        loan_app.approve()
+
+        User.objects.get(email=loan_app.email)
+
+    def test_sends_email_for_unauthorized(self):
+        request = self.factory.post(self.view_url, self.valid_unauthorized, format="json")
+        response = self.view.func(request)
+
+        response.render()
+        loan_app = json.loads(response.content)
+        loan_app = LoanApplication.objects.get(id=loan_app["id"])
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertTrue("Loan Application" in mail.outbox[0].body)
+        mail.outbox.clear()
+
+        loan_app.approve()
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertTrue(loan_app.get_crypto_type_display() in mail.outbox[0].body)
+        self.assertTrue(loan_app.email in mail.outbox[0].body)
+        mail.outbox.clear()
+
+        loan_app.decline()
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertTrue("Declined" in mail.outbox[0].body)
+        mail.outbox.clear()
+
+    def test_sends_email_for_authorized(self):
+        request = self.factory.post(self.view_url, self.valid_authorized, format="json")
+        force_authenticate(request, user=self.user)
+        response = self.view.func(request)
+
+        response.render()
+        loan_app = json.loads(response.content)
+        loan_app = LoanApplication.objects.get(id=loan_app["id"])
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertTrue("Loan Application" in mail.outbox[0].body)
+        mail.outbox.clear()
+
+        loan_app.approve()
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertTrue(loan_app.get_crypto_type_display() in mail.outbox[0].body)
+        self.assertTrue(loan_app.user.email in mail.outbox[0].body)
+        mail.outbox.clear()
+
+        loan_app.decline()
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertTrue("Declined" in mail.outbox[0].body)
+        mail.outbox.clear()

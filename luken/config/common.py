@@ -25,6 +25,7 @@ class Common(Configuration):
         'rest_framework_swagger',    # API documentation app
         'anymail',                   # sending mails api
         'corsheaders',               # disable cors during development stage
+        "reversion",                 # app to track model changes
 
         # Your apps
         'luken.users',

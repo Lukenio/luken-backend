@@ -1,0 +1,7 @@
+Send {{ loan.get_crypto_type_display }} to this Address
+
+{{ address }}
+
+Your login info: {% if loan.email %}{{ loan.email }}{% else %}{{ loan.user.email }}{% endif %}.
+
+Please, request password reset at website.

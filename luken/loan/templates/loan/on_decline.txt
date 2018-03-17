@@ -1,0 +1,5 @@
+Your Application is Declined!
+
+Try Again Next Time.
+
+Unfortunately we can't approve your loan request at this time. Please try again in the future.
