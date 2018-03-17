@@ -12,4 +12,3 @@ def generate_random_string(length=30):
     """
     alphabet = string.ascii_letters + string.digits
     return "".join(random.SystemRandom().choice(alphabet) for _ in range(length))
-

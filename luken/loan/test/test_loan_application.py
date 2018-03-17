@@ -12,7 +12,6 @@ from rest_framework.test import (
     APIRequestFactory,
     force_authenticate
 )
-import reversion
 
 from luken.users.models import User
 
