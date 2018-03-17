@@ -10,10 +10,6 @@ from reversion.models import Version
 from luken.utils.random import generate_random_string
 
 
-plaintext = loader.get_template("loan/email.txt")
-html = loader.get_template("loan/email.html")
-
-
 @reversion.register()
 class LoanApplication(models.Model):
     TERMS_MONTH_CHOICES = (
@@ -22,19 +18,42 @@ class LoanApplication(models.Model):
         (2, "12 Month"),
     )
 
+    BITCOIN_TYPE = 0
+    ETHEREUM_TYPE = 1
+    TYPES = (
+        (BITCOIN_TYPE, "Bitcoin"),
+        (ETHEREUM_TYPE, "Etherium"),
+    )
+
     SUBMITTED_STATE = 0
     IN_REVIEW_STATE = 1
     APPROVED_STATE = 2
+    DECLINED_STATE = 3
+    FUNDED_STATE = 4
+    RELEASED_STATE = 5
     STATE_CHOICES = (
         (SUBMITTED_STATE, "Submitted"),
         (IN_REVIEW_STATE, "In Review"),
         (APPROVED_STATE, "Approved"),
+        (DECLINED_STATE, "Declined"),
+        (FUNDED_STATE, "Funded"),
+        (RELEASED_STATE, "Loan released"),
     )
 
-    TYPES = (
-        (0, "Bitcoin"),
-        (1, "Etherium"),
-    )
+    EMAIL_TEMPLATES = {
+        SUBMITTED_STATE: (
+            loader.get_template("loan/bitcoin/on_submit.txt"),
+            loader.get_template("loan/bitcoin/on_submit.html"),
+        ),
+        APPROVED_STATE: (
+            loader.get_template("loan/ethereum/on_approval.txt"),
+            loader.get_template("loan/ethereum/on_approval.html"),
+        ),
+        DECLINED_STATE: (
+            loader.get_template("loan/ethereum/on_decline.txt"),
+            loader.get_template("loan/ethereum/on_decline.html"),
+        ),
+    }
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name="loan_applications",
@@ -52,20 +71,27 @@ class LoanApplication(models.Model):
         return f"Loan Application - {self.user or self.email}"
 
     @classmethod
-    def send_email(cls, sender, instance, created, **kwargs):
-        if not instance.email or not created:
+    def send_email_dispatch(cls, sender, instance, created, **kwargs):
+        latest = instance.get_latest_revision()
+        if latest.field_dict["state"] <= instance.state:
             return
 
-        ctx = {"loan": instance}
+        text_template, html_template = cls.EMAIL_TEMPLATES[instance.state]
+        ctx = {
+            "loan": instance,
+            # TODO: grab it from settings?
+            "address": "1J19TLLqu8DH2cv3ze7g1xZNwyyXWyGLKc",
+        }
+        text_content = text_template.render(ctx)
+        html_content = html_template.render(ctx)
 
-        text_content = plaintext.render(ctx)
-        html_content = html.render(ctx)
+        email = instance.user.email or instance.email
 
         msg = EmailMultiAlternatives(
             "Mail about Loan Application",
             text_content,
             "loan-application@luken.com",
-            [instance.email],
+            [email],
         )
         msg.attach_alternative(html_content, "text/html")
         msg.send()
@@ -85,7 +111,7 @@ class LoanApplication(models.Model):
         if instance.user is not None or created:
             return
 
-        latest = Version.objects.get_for_object(instance).latest("revision__date_created")
+        latest = instance.get_latest_revision()
 
         if instance.state > latest.field_dict["state"] and instance.state == cls.APPROVED_STATE:
             get_user_model().objects.create_user(
@@ -94,10 +120,13 @@ class LoanApplication(models.Model):
                 password=generate_random_string(),
             )
 
+    def get_latest_revision(self):
+        return Version.objects.get_for_object(self).latest("revision__date_created")
 
-models.signals.post_save.connect(LoanApplication.send_email, sender=LoanApplication)
+
+models.signals.post_save.connect(LoanApplication.create_user_account_after_approval, sender=LoanApplication)
 models.signals.post_save.connect(
     LoanApplication.connect_to_user_after_creation,
     sender=settings.AUTH_USER_MODEL
 )
-models.signals.post_save.connect(LoanApplication.create_user_account_after_approval, sender=LoanApplication)
+models.signals.post_save.connect(LoanApplication.send_email_dispatch, sender=LoanApplication)

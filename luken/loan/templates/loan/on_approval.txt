@@ -1,0 +1,7 @@
+Send {% loan.get_type_display %} to this Address
+
+1E9CwPQGMxwBZdzoLxGP1GvWFJebUDVKd7
+
+Your login info: {% loan.user.email or loan.email %}.
+
+Please, request password reset at website.
