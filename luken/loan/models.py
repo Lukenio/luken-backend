@@ -42,16 +42,16 @@ class LoanApplication(models.Model):
 
     EMAIL_TEMPLATES = {
         SUBMITTED_STATE: (
-            loader.get_template("loan/bitcoin/on_submit.txt"),
-            loader.get_template("loan/bitcoin/on_submit.html"),
+            loader.get_template("loan/on_submit.txt"),
+            loader.get_template("loan/on_submit.html"),
         ),
         APPROVED_STATE: (
-            loader.get_template("loan/ethereum/on_approval.txt"),
-            loader.get_template("loan/ethereum/on_approval.html"),
+            loader.get_template("loan/on_approval.txt"),
+            loader.get_template("loan/on_approval.html"),
         ),
         DECLINED_STATE: (
-            loader.get_template("loan/ethereum/on_decline.txt"),
-            loader.get_template("loan/ethereum/on_decline.html"),
+            loader.get_template("loan/on_decline.txt"),
+            loader.get_template("loan/on_decline.html"),
         ),
     }
 
@@ -71,21 +71,21 @@ class LoanApplication(models.Model):
         return f"Loan Application - {self.user or self.email}"
 
     @classmethod
-    def send_email_dispatch(cls, sender, instance, created, **kwargs):
-        latest = instance.get_latest_revision()
-        if latest.field_dict["state"] <= instance.state:
-            return
+    def post_save_dispatch(cls, sender, instance, created, **kwargs):
+        if created:
+            instance.send_email()
 
-        text_template, html_template = cls.EMAIL_TEMPLATES[instance.state]
+    def send_email(self):
+        text_template, html_template = self.EMAIL_TEMPLATES[self.state]
         ctx = {
-            "loan": instance,
+            "loan": self,
             # TODO: grab it from settings?
             "address": "1J19TLLqu8DH2cv3ze7g1xZNwyyXWyGLKc",
         }
         text_content = text_template.render(ctx)
         html_content = html_template.render(ctx)
 
-        email = instance.user.email or instance.email
+        email = self.email or self.user.email
 
         msg = EmailMultiAlternatives(
             "Mail about Loan Application",
@@ -95,6 +95,29 @@ class LoanApplication(models.Model):
         )
         msg.attach_alternative(html_content, "text/html")
         msg.send()
+
+    def approve(self):
+        self.state = self.APPROVED_STATE
+        self.save()
+        self.send_email()
+        self.create_user_account_after_approval()
+
+    def decline(self):
+        self.state = self.DECLINED_STATE
+        self.save()
+        self.send_email()
+
+    def create_user_account_after_approval(self):
+        latest = self.get_latest_revision()
+        if self.user is not None or latest is None:
+            return
+
+        if self.state > latest.field_dict["state"] and self.state == self.APPROVED_STATE:
+            get_user_model().objects.create_user(
+                username=self.email,
+                email=self.email,
+                password=generate_random_string(),
+            )
 
     @classmethod
     def connect_to_user_after_creation(cls, sender, instance, created, **kwargs):
@@ -106,27 +129,15 @@ class LoanApplication(models.Model):
             loan.user = instance
             loan.save()
 
-    @classmethod
-    def create_user_account_after_approval(cls, sender, instance, created, **kwargs):
-        if instance.user is not None or created:
-            return
-
-        latest = instance.get_latest_revision()
-
-        if instance.state > latest.field_dict["state"] and instance.state == cls.APPROVED_STATE:
-            get_user_model().objects.create_user(
-                username=instance.email,
-                email=instance.email,
-                password=generate_random_string(),
-            )
-
     def get_latest_revision(self):
-        return Version.objects.get_for_object(self).latest("revision__date_created")
+        try:
+            return Version.objects.get_for_object(self).latest("revision__date_created")
+        except Version.DoesNotExist:
+            return None
 
 
-models.signals.post_save.connect(LoanApplication.create_user_account_after_approval, sender=LoanApplication)
+models.signals.post_save.connect(LoanApplication.post_save_dispatch, sender=LoanApplication)
 models.signals.post_save.connect(
     LoanApplication.connect_to_user_after_creation,
     sender=settings.AUTH_USER_MODEL
 )
-models.signals.post_save.connect(LoanApplication.send_email_dispatch, sender=LoanApplication)

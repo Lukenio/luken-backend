@@ -4,7 +4,7 @@
                     <div align="center" class="img-container center  autowidth  fullwidth " style="padding-right: 0px;  padding-left: 0px;">
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px;line-height:0px;"><td style="padding-right: 0px; padding-left: 0px;" align="center"><![endif]-->
 
-<img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl={% loan.get_type_display|lower %}:{% address %}?amount={% loan.loaned_amount %}">
+<img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl={{ loan.get_crypto_type_display|lower }}:{{ address }}?amount={{ loan.loaned_amount }}">
 
 <!--[if mso]></td></tr></table><![endif]-->
 </div>
@@ -15,8 +15,8 @@
 	<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 30px; padding-left: 30px; padding-top: 30px; padding-bottom: 15px;"><![endif]-->
 	<div style="line-height:150%;color:#E0733A;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 30px; padding-left: 30px; padding-top: 30px; padding-bottom: 15px;">
 		<div style="line-height:18px;font-size:12px;color:#E0733A;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;text-align:left;">
-		  <p style="margin: 0;font-size: 12px;text-align: center;line-height: 18px"><strong>Send {% loan.get_type_display %} to this Address</strong></p>
-		  <p style="margin: 0;text-align: center;line-height: 18px;font-size: 12px"><span style="font-size: 24px; line-height: 36px;"><strong>{% address %}</strong></span></p>
+		  <p style="margin: 0;font-size: 12px;text-align: center;line-height: 18px"><strong>Send {{ loan.get_crypto_type_display }} to this Address</strong></p>
+		  <p style="margin: 0;text-align: center;line-height: 18px;font-size: 12px"><span style="font-size: 24px; line-height: 36px;"><strong>{{ address }}</strong></span></p>
 		</div>
 	</div>
 	<!--[if mso]></td></tr></table><![endif]-->
@@ -27,7 +27,8 @@
 	<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top: 0px; padding-bottom: 5px;"><![endif]-->
 	<div style="line-height:120%;color:#555555;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 0px; padding-left: 0px; padding-top: 0px; padding-bottom: 5px;">
 		<div style="line-height:14px;font-size:12px;color:#555555;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;text-align:left;">
-		  <p style="margin: 0;line-height: 14px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 21px;"><strong>Your login info: &nbsp;{% loan.user.email or loan.email %}. Please, request password reset at website.</strong></span>&nbsp;</p>
+		  <p style="margin: 0;line-height: 14px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 21px;"><strong>Your login info: &nbsp;{% if loan.email %}{{ loan.email }}{% else %}{{ loan.user.email }}{% endif %}.
+              Please, request password reset at website.</strong></span>&nbsp;</p>
 		</div>
 	</div>
 	<!--[if mso]></td></tr></table><![endif]-->
