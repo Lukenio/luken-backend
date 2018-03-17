@@ -12,6 +12,7 @@ from rest_framework.test import (
     APIRequestFactory,
     force_authenticate
 )
+import reversion
 
 from luken.users.models import User
 
@@ -122,8 +123,21 @@ class CreateCoinAccountTestCase(BaseLoanApplicationTestCase):
         response.render()
 
         loan_app = json.loads(response.content)
-        db_loan_app = LoanApplication.objects.get(id=loan_app["id"])
+        loan_app = LoanApplication.objects.get(id=loan_app["id"])
 
-        bound_user = G(User, email=db_loan_app.email)
-        db_loan_app = LoanApplication.objects.get(id=loan_app["id"])
-        self.assertEqual(db_loan_app.user, bound_user)
+        bound_user = G(User, email=loan_app.email)
+        loan_app.refresh_from_db()
+        self.assertEqual(loan_app.user, bound_user)
+
+    def test_creates_new_user_account_when_approved(self):
+        request = self.factory.post(self.view_url, self.valid_unauthorized, format="json")
+        response = self.view.func(request)
+
+        response.render()
+        loan_app = json.loads(response.content)
+        loan_app = LoanApplication.objects.get(id=loan_app["id"])
+
+        loan_app.state = LoanApplication.APPROVED_STATE
+        loan_app.save()
+
+        User.objects.get(email=loan_app.email)

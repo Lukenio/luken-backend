@@ -4,13 +4,20 @@ from rest_framework import (
 )
 
 from luken.coins.permissions import OwnerOnly
-from luken.utils.views import PermissionByActionMixin
+from luken.utils.views import (
+    PermissionByActionMixin,
+    ReversionViewMixin,
+)
 
 from .models import LoanApplication
 from .serializers import LoanApplicationSerializer
 
 
-class LoanApplicationViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
+class LoanApplicationViewSet(
+    PermissionByActionMixin,
+    ReversionViewMixin,
+    viewsets.ModelViewSet
+):
     """
     RUD operations for Loan Applications.
     """

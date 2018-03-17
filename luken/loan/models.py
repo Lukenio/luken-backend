@@ -1,13 +1,20 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives
 from django.db import models
 from django.template import loader
+
+import reversion
+from reversion.models import Version
+
+from luken.utils.random import generate_random_string
 
 
 plaintext = loader.get_template("loan/email.txt")
 html = loader.get_template("loan/email.html")
 
 
+@reversion.register()
 class LoanApplication(models.Model):
     TERMS_MONTH_CHOICES = (
         (0, "3 Month"),
@@ -15,10 +22,13 @@ class LoanApplication(models.Model):
         (2, "12 Month"),
     )
 
+    SUBMITTED_STATE = 0
+    IN_REVIEW_STATE = 1
+    APPROVED_STATE = 2
     STATE_CHOICES = (
-        (0, "Submitted"),
-        (1, "In Review"),
-        (2, "Approved"),
+        (SUBMITTED_STATE, "Submitted"),
+        (IN_REVIEW_STATE, "In Review"),
+        (APPROVED_STATE, "Approved"),
     )
 
     TYPES = (
@@ -70,9 +80,24 @@ class LoanApplication(models.Model):
             loan.user = instance
             loan.save()
 
+    @classmethod
+    def create_user_account_after_approval(cls, sender, instance, created, **kwargs):
+        if instance.user is not None or created:
+            return
+
+        latest = Version.objects.get_for_object(instance).latest("revision__date_created")
+
+        if instance.state > latest.field_dict["state"] and instance.state == cls.APPROVED_STATE:
+            get_user_model().objects.create_user(
+                username=instance.email,
+                email=instance.email,
+                password=generate_random_string(),
+            )
+
 
 models.signals.post_save.connect(LoanApplication.send_email, sender=LoanApplication)
 models.signals.post_save.connect(
     LoanApplication.connect_to_user_after_creation,
     sender=settings.AUTH_USER_MODEL
 )
+models.signals.post_save.connect(LoanApplication.create_user_account_after_approval, sender=LoanApplication)
