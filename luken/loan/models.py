@@ -88,9 +88,9 @@ class LoanApplication(models.Model):
         email = self.email or self.user.email
 
         msg = EmailMultiAlternatives(
-            "Mail about Loan Application",
+            "Crypto Loan Application",
             text_content,
-            "loan-application@luken.com",
+            "apply@loanz.io",
             [email],
         )
         msg.attach_alternative(html_content, "text/html")
