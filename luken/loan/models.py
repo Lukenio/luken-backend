@@ -72,16 +72,20 @@ class LoanApplication(models.Model):
 
     @classmethod
     def post_save_dispatch(cls, sender, instance, created, **kwargs):
-        if created:
-            instance.send_email()
+        if not created:
+            return
+
+        instance.send_email()
 
     def send_email(self):
         text_template, html_template = self.EMAIL_TEMPLATES[self.state]
         ctx = {
             "loan": self,
-            # TODO: grab it from settings?
-            "address": "1J19TLLqu8DH2cv3ze7g1xZNwyyXWyGLKc",
         }
+
+        if self.state == self.APPROVED_STATE:
+            ctx["address"] = self.user.coin_accounts.get(type=self.crypto_type).pub_address
+
         text_content = text_template.render(ctx)
         html_content = html_template.render(ctx)
 
@@ -97,22 +101,28 @@ class LoanApplication(models.Model):
         msg.send()
 
     def approve(self):
+        assert self.state < self.APPROVED_STATE
+
         self.state = self.APPROVED_STATE
         self.save()
+
+        if self.user is None:
+            self.create_user_account_after_approval()
+            self.refresh_from_db()
+
         self.send_email()
-        self.create_user_account_after_approval()
 
     def decline(self):
+        assert self.state < self.DECLINED_STATE
+
         self.state = self.DECLINED_STATE
         self.save()
         self.send_email()
 
     def create_user_account_after_approval(self):
-        latest = self.get_latest_revision()
-        if self.user is not None or latest is None:
-            return
+        assert self.user is None
 
-        if self.state > latest.field_dict["state"] and self.state == self.APPROVED_STATE:
+        if self.state == self.APPROVED_STATE:
             get_user_model().objects.create_user(
                 username=self.email,
                 email=self.email,
