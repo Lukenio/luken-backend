@@ -135,8 +135,8 @@ class CreateCoinAccountTestCase(BaseLoanApplicationTestCase):
         loan_app = json.loads(response.content)
         loan_app = LoanApplication.objects.get(id=loan_app["id"])
 
-        # import pdb; pdb.set_trace()
-        loan_app.approve()
+        loan_app.state = loan_app.APPROVED_STATE
+        loan_app.save()
 
         User.objects.get(email=loan_app.email)
 
@@ -152,7 +152,8 @@ class CreateCoinAccountTestCase(BaseLoanApplicationTestCase):
         self.assertTrue("Loan Application" in mail.outbox[0].body)
         mail.outbox.clear()
 
-        loan_app.approve()
+        loan_app.state = loan_app.APPROVED_STATE
+        loan_app.save()
 
         self.assertEqual(len(mail.outbox), 1)
         self.assertTrue(loan_app.get_crypto_type_display() in mail.outbox[0].body)
@@ -161,7 +162,8 @@ class CreateCoinAccountTestCase(BaseLoanApplicationTestCase):
         self.assertTrue(pub_address in mail.outbox[0].body)
         mail.outbox.clear()
 
-        loan_app.decline()
+        loan_app.state = loan_app.DECLINED_STATE
+        loan_app.save()
 
         self.assertEqual(len(mail.outbox), 1)
         self.assertTrue("Declined" in mail.outbox[0].body)
@@ -180,7 +182,8 @@ class CreateCoinAccountTestCase(BaseLoanApplicationTestCase):
         self.assertTrue("Loan Application" in mail.outbox[0].body)
         mail.outbox.clear()
 
-        loan_app.approve()
+        loan_app.state = loan_app.APPROVED_STATE
+        loan_app.save()
 
         self.assertEqual(len(mail.outbox), 1)
         self.assertTrue(loan_app.get_crypto_type_display() in mail.outbox[0].body)
@@ -189,7 +192,8 @@ class CreateCoinAccountTestCase(BaseLoanApplicationTestCase):
         self.assertTrue(pub_address in mail.outbox[0].body)
         mail.outbox.clear()
 
-        loan_app.decline()
+        loan_app.state = loan_app.DECLINED_STATE
+        loan_app.save()
 
         self.assertEqual(len(mail.outbox), 1)
         self.assertTrue("Declined" in mail.outbox[0].body)
