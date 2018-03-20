@@ -72,20 +72,23 @@ class LoanApplication(models.Model):
 
     @classmethod
     def post_save_dispatch(cls, sender, instance, created, **kwargs):
-        if not created:
+        if created:
+            instance.send_email()
             return
 
-        instance.send_email()
+        latest = instance.get_latest_revision()
+        if instance.state <= latest.field_dict["state"]:
+            return
 
-    def send_email(self):
+        if instance.state == cls.APPROVED_STATE:
+            instance.on_approval()
+        elif instance.state == cls.DECLINED_STATE:
+            instance.on_decline()
+
+    def send_email(self, **ctx):
+        ctx["loan"] = self
+
         text_template, html_template = self.EMAIL_TEMPLATES[self.state]
-        ctx = {
-            "loan": self,
-        }
-
-        if self.state == self.APPROVED_STATE:
-            ctx["address"] = self.user.coin_accounts.get(type=self.crypto_type).pub_address
-
         text_content = text_template.render(ctx)
         html_content = html_template.render(ctx)
 
@@ -100,23 +103,14 @@ class LoanApplication(models.Model):
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
-    def approve(self):
-        assert self.state < self.APPROVED_STATE
-
-        self.state = self.APPROVED_STATE
-        self.save()
-
+    def on_approval(self):
         if self.user is None:
             self.create_user_account_after_approval()
             self.refresh_from_db()
 
-        self.send_email()
+        self.send_email(address=self.user.coin_accounts.get(type=self.crypto_type).pub_address)
 
-    def decline(self):
-        assert self.state < self.DECLINED_STATE
-
-        self.state = self.DECLINED_STATE
-        self.save()
+    def on_decline(self):
         self.send_email()
 
     def create_user_account_after_approval(self):
@@ -134,10 +128,7 @@ class LoanApplication(models.Model):
         if not created:
             return
 
-        anonymous_loans = cls.objects.filter(user=None, email=instance.email)
-        for loan in anonymous_loans:
-            loan.user = instance
-            loan.save()
+        cls.objects.filter(user=None, email=instance.email).update(user=instance)
 
     def get_latest_revision(self):
         try:
