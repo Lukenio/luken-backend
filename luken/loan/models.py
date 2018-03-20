@@ -6,7 +6,6 @@ from django.template import loader
 
 import reversion
 from reversion.models import Version
-from reversion.signals import post_revision_commit
 
 from luken.utils.random import generate_random_string
 
