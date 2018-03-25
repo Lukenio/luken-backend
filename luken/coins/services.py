@@ -22,14 +22,16 @@ class BitcoinBackend(CoinBackendBase):
     """
     Bitcoin backend
     """
-    pass
+    def get_address(self, name):
+        return '1E9CwPQGMxwBZdzoLxGP1GvWFJebUDVKd7'
 
 
 class EthereumBackend(CoinBackendBase):
     """
     Ethereum backend
     """
-    pass
+    def get_address(self, name):
+        return '0x98dD3568472ecB152C8a42070Ed078AcE577BaB3'
 
 
 class LitecoinBackend(CoinBackendBase):
