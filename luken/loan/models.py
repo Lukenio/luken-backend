@@ -67,6 +67,10 @@ class LoanApplication(models.Model):
     terms_month = models.SmallIntegerField(choices=TERMS_MONTH_CHOICES)
     state = models.SmallIntegerField(choices=STATE_CHOICES, default=STATE_CHOICES[0][0])
 
+    total_loaned_amount = models.DecimalField(decimal_places=2, max_digits=20)
+    ltv = models.DecimalField(decimal_places=2, max_digits=4)
+    apr = models.DecimalField(decimal_places=2, max_digits=4)
+
     def __str__(self):
         return f"Loan Application - {self.user or self.email}"
 

@@ -7,6 +7,21 @@ from .models import LoanApplication
 
 class LoanApplicationSerializer(serializers.ModelSerializer):
 
+    loaned_amount = serializers.DecimalField(decimal_places=2,
+                                             max_digits=20,
+                                             max_value=1000000.00,
+                                             min_value=3000)
+
+    ltv = serializers.DecimalField(decimal_places=2,
+                                   max_digits=3,
+                                   max_value=1.0,
+                                   min_value=0.1)
+
+    apr = serializers.DecimalField(decimal_places=2,
+                                   max_digits=3,
+                                   max_value=1.0,
+                                   min_value=0.1)
+
     class Meta:
         model = LoanApplication
         fields = "__all__"

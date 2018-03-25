@@ -36,7 +36,10 @@ class CreateCoinAccountTestCase(BaseLoanApplicationTestCase):
         super().setUp()
 
         self.base_loan_application = {
-            "loaned_amount": 123.4,
+            "loaned_amount": 3000.4,
+            "total_loaned_amount": 3500.0,
+            "ltv": 0.35,
+            "apr": 0.2,
             "crypto_collateral": 1234.5,
             "crypto_price_usd": 10000.0,
             "crypto_type": LoanApplication.TYPES[1][0],
@@ -111,6 +114,7 @@ class CreateCoinAccountTestCase(BaseLoanApplicationTestCase):
             .values_list("pk", flat=True)
 
         first_user_loan_apps = json.loads(response.content)
+
         self.assertGreater(len(first_user_loan_apps["results"]), 0)
         for app in first_user_loan_apps["results"]:
             self.assertTrue(app["id"] not in second_user_loan_app_ids)
