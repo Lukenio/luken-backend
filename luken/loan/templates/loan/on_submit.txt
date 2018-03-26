@@ -1,5 +1,17 @@
 Your Loan Application Received!
 
+Your Requested Loan Amount is ${{ loan.crypto_price_usd }}
+
+Term: {{ load.get_terms_month_display }}
+
+APR: {{ loan.get_approval_prob_percent }}%
+
+Your Total Loan Amount* is ${{ loan.total_loaned_amount }}
+
+Your Total Collateral Amount is {{ loan.crypto_collateral }} {{ loan.get_crypto_type_display }}
+
+Your Loan Maturity date is {{ loan.get_maturity_date }}
+
 In order to proceed with loan application, you need to
 confirm your email and complete KYC verification.
 

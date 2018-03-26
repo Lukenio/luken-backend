@@ -4,30 +4,41 @@
 
 {% block content %}
 
-                        <div align="center" class="img-container center  autowidth  fullwidth " style="padding-right: 0px;  padding-left: 0px;">
-    <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px;line-height:0px;"><td style="padding-right: 0px; padding-left: 0px;" align="center"><![endif]-->
-      <img class="center  autowidth  fullwidth" align="center" border="0" src="{% static 'loan/img/submit.png' %}" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: 0;height: auto;float: none;width: 100%;max-width: 500px" width="500">
-    <!--[if mso]></td></tr></table><![endif]-->
-    </div>
-
-
-
                         <div class="">
-        <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 30px; padding-left: 30px; padding-top: 30px; padding-bottom: 15px;"><![endif]-->
-        <div style="line-height:120%;color:#4490eb;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 30px; padding-left: 30px; padding-top: 30px; padding-bottom: 15px;">
-            <div style="font-family:Montserrat, 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;font-size:12px;line-height:14px;color:#4490eb;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 14px;text-align: center"><span style="font-size: 24px; line-height: 28px;"><strong>Your Loan <span style="line-height: 28px; font-size: 24px;">Application</span> Received!</strong></span></p></div>
-        </div>
-        <!--[if mso]></td></tr></table><![endif]-->
-    </div>
+	<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 30px; padding-left: 30px; padding-top: 30px; padding-bottom: 15px;"><![endif]-->
+	<div style="line-height:150%;color:#E0733A;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 30px; padding-left: 30px; padding-top: 30px; padding-bottom: 15px;">
+		<div style="line-height:18px;font-size:12px;color:#1c91f2;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;text-align:left;">
+		  <p style="margin: 0;font-size: 12px;text-align: center;line-height: 18px"><span style="line-height: 18px; font-size: 12px;"><span style="text-align: left; background-color: transparent; font-size: 24px; line-height: 36px;"><strong>Your Loan Application Received</strong></span></span></p></div>
+	</div>
+	<!--[if mso]></td></tr></table><![endif]-->
+</div>
 
 
-                        <div class="">
-        <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top: 0px; padding-bottom: 5px;"><![endif]-->
-        <div style="line-height:120%;color:#555555;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 0px; padding-left: 0px; padding-top: 0px; padding-bottom: 5px;">
-            <div style="font-size:12px;line-height:14px;color:#555555;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;text-align:left;"><p style="margin: 0;font-size: 12px;line-height: 14px;text-align: center"><span style="font-size: 18px; line-height: 21px;"><strong><span style="line-height: 21px; font-size: 18px;">In order to proceed with loan application, you need to confirm your email and complete KYC verification.</span></strong></span></p></div>
-        </div>
-        <!--[if mso]></td></tr></table><![endif]-->
-    </div>
+                    <div class="">
+	<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top: 0px; padding-bottom: 5px;"><![endif]-->
+	<div style="line-height:120%;color:#555555;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 0px; padding-left: 0px; padding-top: 0px; padding-bottom: 5px;">
+		<div style="line-height:26px;font-size:12px;color:#555555;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;text-align:left;"><p style="margin: 0;line-height: 14px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 26px;"><strong>Your Requested Loan Amount is ${{ loan.crypto_price_usd }}
+</strong></span></p>
+		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong> Term: {{ load.get_terms_month_display }}
+
+		    </strong></span></p>
+		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>APR: {{ loan.get_approval_prob_percent }}%
+
+		    </strong></span></p>
+		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>Your Total Loan Amount* is ${{ loan.total_loaned_amount }}
+
+		    </strong></span></p>
+		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>Your Total Collateral Amount is {{ loan.crypto_collateral }} {{ loan.get_crypto_type_display }}
+
+		    </strong></span></p>
+		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>Your Loan Maturity date is {{ loan.get_maturity_date }}</strong></span></p>
+
+		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px">&nbsp;</p>
+		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 26px;"><strong> In order to proceed with loan application, you need to confirm your email and complete KYC verification. </strong></span></p>
+		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px">&nbsp;</p>
+		</div>
+	</div>
+	<!--[if mso]></td></tr></table><![endif]-->
 
 
 
