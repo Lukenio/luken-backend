@@ -1,3 +1,5 @@
+from dateutil.relativedelta import relativedelta
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives
@@ -12,11 +14,19 @@ from luken.utils.random import generate_random_string
 
 @reversion.register()
 class LoanApplication(models.Model):
+    THREE_MONTH = 0
+    SIX_MONTH = 1
+    TWELVE_MONTH = 2
     TERMS_MONTH_CHOICES = (
-        (0, "3 Month"),
-        (1, "6 Month"),
-        (2, "12 Month"),
+        (THREE_MONTH, "3 Month"),
+        (SIX_MONTH, "6 Month"),
+        (TWELVE_MONTH, "12 Month"),
     )
+    TERMS_DELTAS = {
+        THREE_MONTH: relativedelta(months=+3),
+        SIX_MONTH: relativedelta(months=+6),
+        TWELVE_MONTH: relativedelta(months=+12),
+    }
 
     BITCOIN_TYPE = 0
     ETHEREUM_TYPE = 1
@@ -65,6 +75,7 @@ class LoanApplication(models.Model):
     crypto_price_usd = models.DecimalField(decimal_places=2, max_digits=20)
     crypto_type = models.SmallIntegerField(choices=TYPES)
     terms_month = models.SmallIntegerField(choices=TERMS_MONTH_CHOICES)
+    created = models.DateTimeField(auto_now_add=True)
     state = models.SmallIntegerField(choices=STATE_CHOICES, default=STATE_CHOICES[0][0])
 
     total_loaned_amount = models.DecimalField(decimal_places=2, max_digits=20)
@@ -139,6 +150,13 @@ class LoanApplication(models.Model):
             return Version.objects.get_for_object(self).latest("revision__date_created")
         except Version.DoesNotExist:
             return None
+
+    def get_approval_prob_percent(self):
+        return self.apr * 100
+
+    def get_maturity_date(self):
+        delta = self.TERMS_DELTAS[self.terms_month]
+        return self.created + delta
 
 
 models.signals.post_save.connect(LoanApplication.post_save_dispatch, sender=LoanApplication)
