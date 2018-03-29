@@ -19,18 +19,10 @@
 	<div style="line-height:120%;color:#555555;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 0px; padding-left: 0px; padding-top: 0px; padding-bottom: 5px;">
 		<div style="line-height:26px;font-size:12px;color:#555555;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;text-align:left;"><p style="margin: 0;line-height: 14px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 26px;"><strong>Your Requested Loan Amount is ${{ loan.loaned_amount }}
 </strong></span></p>
-		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong> Term: {{ load.get_terms_month_display }}
-
-		    </strong></span></p>
-		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>APR: {{ loan.get_approval_prob_percent }}%
-
-		    </strong></span></p>
-		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>Your Total Loan Amount* is ${{ loan.total_loaned_amount }}
-
-		    </strong></span></p>
-		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>Your Total Collateral Amount is {{ loan.crypto_collateral }} {{ loan.get_crypto_type_display }}
-
-		    </strong></span></p>
+		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"> <strong> Term: {{ loan.get_terms_month_display }}</strong></span></p>
+		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>APR: {{ loan.get_approval_prob_percent }}%</strong></span></p>
+		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>Your Total Loan Amount* is ${{ loan.total_loaned_amount }}</strong></span></p>
+		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>Your Total Collateral Amount is {{ loan.crypto_collateral }} {{ loan.get_crypto_type_display }}</strong></span></p>
 		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>Your Loan Maturity date is {{ loan.get_maturity_date }}</strong></span></p>
 
 		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px">&nbsp;</p>
