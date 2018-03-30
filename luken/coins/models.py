@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.db.models import Sum
 
 from .services import (
     get_coin_backend,
@@ -50,11 +51,25 @@ class CoinAccount(models.Model):
                 type=db_type,
             )
 
+    def balance(self):
+        received_amount = self.transactions\
+            .filter(type=Transaction.RECEIVED)\
+            .aggregate(Sum('amount'))['amount__sum']
+
+        sent_amount = self.transactions\
+            .filter(type=Transaction.SENT)\
+            .aggregate(Sum('amount'))['amount__sum']
+
+        return (received_amount or 0) - (sent_amount or 0)
+
 
 class Transaction(models.Model):
+
+    RECEIVED, SENT = 0, 1
+
     TYPES = (
-        (0, "Received"),
-        (1, "Sent"),
+        (RECEIVED, "Received"),
+        (SENT, "Sent"),
     )
 
     account = models.ForeignKey(CoinAccount, on_delete=models.PROTECT, related_name="transactions")
