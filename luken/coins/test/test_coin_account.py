@@ -4,7 +4,7 @@ from django.urls import (
     reverse_lazy,
     resolve,
 )
-from django_dynamic_fixture import G, P
+from django_dynamic_fixture import G
 from rest_framework import status
 from rest_framework.test import (
     APIRequestFactory,
@@ -54,8 +54,8 @@ class CreateCoinAccountTestCase(BaseCoinAccountTestCase):
 
         acc = G(CoinAccount)
         G(Transaction, amount=Decimal('4.201'),
-                   type=Transaction.RECEIVED, account=acc)
+          type=Transaction.RECEIVED, account=acc)
         G(Transaction, amount=Decimal('3.1'),
-                   type=Transaction.SENT, account=acc)
+          type=Transaction.SENT, account=acc)
 
         self.assertEquals(acc.balance(), Decimal('4.201') - Decimal('3.1'))
