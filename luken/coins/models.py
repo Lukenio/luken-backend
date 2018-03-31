@@ -54,18 +54,19 @@ class CoinAccount(models.Model):
     def balance(self):
         received_amount = self.transactions\
             .filter(type=Transaction.RECEIVED)\
-            .aggregate(Sum('amount'))['amount__sum']
+            .aggregate(Sum('amount'))
 
         sent_amount = self.transactions\
             .filter(type=Transaction.SENT)\
-            .aggregate(Sum('amount'))['amount__sum']
+            .aggregate(Sum('amount'))
 
-        return (received_amount or 0) - (sent_amount or 0)
+        return (received_amount['amount__sum'] or 0) - (sent_amount['amount__sum'] or 0)
 
 
 class Transaction(models.Model):
 
-    RECEIVED, SENT = 0, 1
+    RECEIVED = 0
+    SENT = 1
 
     TYPES = (
         (RECEIVED, "Received"),

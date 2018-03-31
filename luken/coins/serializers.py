@@ -5,7 +5,7 @@ from .models import CoinAccount
 
 class CoinAccountSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
-    balance = serializers.Field(source='balance')
+    balance = serializers.ReadOnlyField()
 
     class Meta:
         model = CoinAccount
