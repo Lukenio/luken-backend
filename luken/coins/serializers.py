@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import CoinAccount
+from .models import CoinAccount, WithdrawRequest
 
 
 class CoinAccountSerializer(serializers.ModelSerializer):
@@ -11,3 +11,12 @@ class CoinAccountSerializer(serializers.ModelSerializer):
         model = CoinAccount
         fields = "__all__"
         read_only_fields = ("created", "updated", "user", "vault_id", "pub_address", "balance")
+
+
+class WithdrawRequestSerializer(serializers.ModelSerializer):
+    account = serializers.PrimaryKeyRelatedField(queryset=CoinAccount.objects.all())
+
+    class Meta:
+        model = WithdrawRequest
+        fields = "__all__"
+        read_only_fields = ("created", "updated")

@@ -51,11 +51,24 @@ class CreateCoinAccountTestCase(BaseCoinAccountTestCase):
         self.assertEqual(CoinAccount.objects.filter(user=new_user).count(), len(CoinAccount.TYPES))
 
     def test_balance_field(self):
-
         acc = G(CoinAccount)
         G(Transaction, amount=Decimal('4.201'),
           type=Transaction.RECEIVED, account=acc)
         G(Transaction, amount=Decimal('3.1'),
           type=Transaction.SENT, account=acc)
-
         self.assertEquals(acc.balance(), Decimal('4.201') - Decimal('3.1'))
+
+    def test_withdraw_request(self):
+        
+        request_data = {
+            "amount": 1.1,
+            "pub_address": "hellowoeld"
+        }
+
+        acc = G(CoinAccount)
+        url = reverse_lazy('coin-accounts-withdraw-request', args=[acc.id])
+        view = resolve(url)
+        request = self.factory.post(url, request_data, format="json")
+        response = view.func(request, pk=acc.id)
+        response.render()
+

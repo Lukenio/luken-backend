@@ -84,6 +84,14 @@ class Transaction(models.Model):
         return f"{self.get_type_display()} transaction on {self.account} at {self.datetime}"
 
 
+class WithdrawRequest(models.Model):
+    account = models.ForeignKey(CoinAccount, on_delete=models.PROTECT)
+    created = models.DateTimeField(auto_now_add=True)
+    amount = models.DecimalField(max_digits=20, decimal_places=8)
+    updated = models.DateTimeField(auto_now=True)
+    pub_address = models.CharField(max_length=255)
+
+
 models.signals.post_save.connect(
     CoinAccount.assign_default_accounts_to_new_user,
     sender=settings.AUTH_USER_MODEL
