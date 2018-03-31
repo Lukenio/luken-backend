@@ -9,13 +9,12 @@ from rest_framework.response import Response
 
 from luken.utils.views import PermissionByActionMixin
 
-from .models import CoinAccount, WithdrawRequest
+from .models import CoinAccount
 from .permissions import OwnerOnly
 from .serializers import CoinAccountSerializer, WithdrawRequestSerializer
 
 
-class ModelCreateViewSet(mixins.CreateModelMixin,
-                   viewsets.GenericViewSet):
+class ModelCreateViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     A viewset that provides default `create()` action
     """

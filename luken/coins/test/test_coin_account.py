@@ -59,7 +59,7 @@ class CreateCoinAccountTestCase(BaseCoinAccountTestCase):
         self.assertEquals(acc.balance(), Decimal('4.201') - Decimal('3.1'))
 
     def test_withdraw_request(self):
-        
+
         request_data = {
             "amount": 1.1,
             "pub_address": "hellowoeld"
@@ -71,4 +71,3 @@ class CreateCoinAccountTestCase(BaseCoinAccountTestCase):
         request = self.factory.post(url, request_data, format="json")
         response = view.func(request, pk=acc.id)
         response.render()
-
