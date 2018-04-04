@@ -1,5 +1,10 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .models import User
+from luken.coins.serializers import CoinAccountSerializer
+
+from rest_registration.api.serializers import DefaultUserProfileSerializer, \
+    _get_field_names, MetaObj
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -23,3 +28,24 @@ class CreateUserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'password', 'first_name', 'last_name', 'email', 'auth_token',)
         read_only_fields = ('auth_token',)
         extra_kwargs = {'password': {'write_only': True}}
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+
+    coin_accounts = CoinAccountSerializer(many=True)
+
+    def __init__(self, *args, **kwargs):
+        user_class = get_user_model()
+        field_names = _get_field_names(allow_primary_key=True)
+        read_only_field_names = _get_field_names(allow_primary_key=True,
+                                                 non_editable=True)
+
+        field_names += ('coin_accounts', )
+        read_only_field_names += ('coin_accounts', )
+
+        self.Meta = MetaObj()
+        self.Meta.model = user_class
+        self.Meta.fields = field_names
+        self.Meta.read_only_fields = read_only_field_names
+
+        super().__init__(*args, **kwargs)

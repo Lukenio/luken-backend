@@ -214,6 +214,8 @@ class Common(Configuration):
         'REGISTER_EMAIL_VERIFICATION_ENABLED': True,
         'VERIFICATION_FROM_EMAIL': 'no-reply@example.com',
         "REGISTER_EMAIL_VERIFICATION_URL": "/verify-email/",
+        "PROFILE_SERIALIZER_CLASS":
+            "luken.users.serializers.UserProfileSerializer"
     }
 
     SWAGGER_SETTINGS = {
