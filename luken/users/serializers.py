@@ -3,8 +3,7 @@ from rest_framework import serializers
 from .models import User
 from luken.coins.serializers import CoinAccountSerializer
 
-from rest_registration.api.serializers import DefaultUserProfileSerializer, \
-    _get_field_names, MetaObj
+from rest_registration.api.serializers import _get_field_names
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -42,6 +41,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
         field_names += ('coin_accounts', )
         read_only_field_names += ('coin_accounts', )
+
+        class MetaObj(object):
+            pass
 
         self.Meta = MetaObj()
         self.Meta.model = user_class
