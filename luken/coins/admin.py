@@ -1,14 +1,12 @@
 from django.contrib import admin
 
-from luken.utils.admin import ReadonlyTabularInline
-
 from .models import (
     CoinAccount,
     Transaction
 )
 
 
-class TransactionInline(ReadonlyTabularInline):
+class TransactionInline(admin.TabularInline):
     model = Transaction
 
 
