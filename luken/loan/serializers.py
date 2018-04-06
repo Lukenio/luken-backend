@@ -10,7 +10,7 @@ class LoanApplicationSerializer(serializers.ModelSerializer):
     loaned_amount = serializers.DecimalField(decimal_places=2,
                                              max_digits=20,
                                              max_value=1000000.00,
-                                             min_value=3000)
+                                             min_value=500)
 
     ltv = serializers.DecimalField(decimal_places=2,
                                    max_digits=3,
