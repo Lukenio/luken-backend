@@ -41,11 +41,18 @@ class LoanApplication(models.Model):
     DECLINED_STATE = 3
     FUNDED_STATE = 4
     RELEASED_STATE = 5
+    KYC_SUBMITTED = 6
+    KYC_VERIFIED = 7
+    CONTRACT_SIGNED = 8
+
     STATE_CHOICES = (
         (SUBMITTED_STATE, "Submitted"),
         (IN_REVIEW_STATE, "In Review"),
         (APPROVED_STATE, "Approved"),
         (DECLINED_STATE, "Declined"),
+        (KYC_SUBMITTED, "KYC Submitted"),
+        (KYC_VERIFIED, "KYC Verified"),
+        (CONTRACT_SIGNED, "Contract Signed"),
         (FUNDED_STATE, "Funded"),
         (RELEASED_STATE, "Loan released"),
     )
@@ -77,7 +84,7 @@ class LoanApplication(models.Model):
     terms_month = models.SmallIntegerField(choices=TERMS_MONTH_CHOICES)
     created = models.DateTimeField(auto_now_add=True)
     state = models.SmallIntegerField(choices=STATE_CHOICES, default=STATE_CHOICES[0][0])
-
+    terms_of_service_agree = models.BooleanField()
     total_loaned_amount = models.DecimalField(decimal_places=2, max_digits=20)
     ltv = models.DecimalField(decimal_places=2, max_digits=4)
     apr = models.DecimalField(decimal_places=2, max_digits=4)

@@ -42,6 +42,7 @@ class CreateCoinAccountTestCase(BaseLoanApplicationTestCase):
             "apr": 0.2,
             "crypto_collateral": 1234.5,
             "crypto_price_usd": 10000.0,
+            "terms_of_service_agree": True,
             "crypto_type": LoanApplication.TYPES[1][0],
             "terms_month": LoanApplication.TERMS_MONTH_CHOICES[0][0],
         }
