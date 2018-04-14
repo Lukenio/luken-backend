@@ -18,6 +18,7 @@ class User(AbstractUser):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     type = models.CharField(choices=USER_TYPES, max_length=10)
+    kyc_applied = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
