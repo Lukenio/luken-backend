@@ -20,7 +20,7 @@ class Partner(models.Model):
 
 class PartnerToken(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    partner = models.ForeignKey(Partner, on_delete=models.CASCADE)
+    partner = models.ForeignKey(Partner, on_delete=models.CASCADE, related_name="tokens")
 
     def __str__(self):
         return f"{self.partner}: {self.id}"
