@@ -65,18 +65,42 @@ class CreateCoinAccountTestCase(BaseCoinAccountTestCase):
         self.assertEquals(acc.balance(), Decimal('4.201') - Decimal('3.1'))
 
     def test_withdraw_request(self):
+        withdraw_amount = 0.1
 
         request_data = {
-            "amount": 1.1,
+            "amount": withdraw_amount,
             "pub_address": "hellowoeld"
         }
 
         acc = G(CoinAccount)
+        G(Transaction, account=acc, type=Transaction.RECEIVED, amount=withdraw_amount + 1)
+
         url = reverse_lazy('coin-accounts-withdraw-request', args=[acc.id])
         view = resolve(url)
         request = self.factory.post(url, request_data, format="json")
         response = view.func(request, pk=acc.id)
         response.render()
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+
+    def test_error_if_withdrawal_amount_is_greater_than_account_amount(self):
+        withdraw_amount = 2.1
+
+        request_data = {
+            "amount": withdraw_amount,
+            "pub_address": "hello-world"
+        }
+
+        acc = G(CoinAccount)
+        G(Transaction, account=acc, type=Transaction.RECEIVED, amount=withdraw_amount - 1)
+
+        url = reverse_lazy('coin-accounts-withdraw-request', args=[acc.id])
+        view = resolve(url)
+        request = self.factory.post(url, request_data, format="json")
+        response = view.func(request, pk=acc.id)
+        response.render()
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST, msg=response.content)
 
     def test_returns_pending_withdrawal_amount(self):
         account = G(CoinAccount, user=self.user)
