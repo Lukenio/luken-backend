@@ -1,3 +1,5 @@
+import json
+
 from decimal import Decimal
 from django.test import TestCase
 from django.urls import (
@@ -13,7 +15,11 @@ from rest_framework.test import (
 
 from luken.users.models import User
 
-from ..models import CoinAccount, Transaction
+from ..models import (
+    CoinAccount,
+    Transaction,
+    WithdrawRequest
+)
 
 
 class BaseCoinAccountTestCase(TestCase):
@@ -71,3 +77,19 @@ class CreateCoinAccountTestCase(BaseCoinAccountTestCase):
         request = self.factory.post(url, request_data, format="json")
         response = view.func(request, pk=acc.id)
         response.render()
+
+    def test_returns_pending_withdrawal_amount(self):
+        account = G(CoinAccount, user=self.user)
+        withdraw_request = G(WithdrawRequest, account=account)
+
+        url = reverse_lazy('coin-accounts-detail', args=[account.id])
+        view = resolve(url)
+
+        request = self.factory.get(url, format="json")
+        force_authenticate(request, user=self.user)
+        response = view.func(request, pk=account.id)
+        response.render()
+
+        account_from_response = json.loads(response.content)
+
+        self.assertEqual(account_from_response["pending_withdrawal_request"], withdraw_request.amount)
