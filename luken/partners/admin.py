@@ -1,3 +1,19 @@
 from django.contrib import admin
 
-# Register your models here.
+from luken.utils.admin import ReadonlyTabularInline
+
+from .models import (
+    Partner,
+    PartnerToken
+)
+
+
+class PartnerTokenInline(ReadonlyTabularInline):
+    model = PartnerToken
+
+
+@admin.register(Partner)
+class PartnerAdmin(admin.ModelAdmin):
+    inlines = [
+        PartnerTokenInline,
+    ]
