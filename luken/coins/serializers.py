@@ -21,3 +21,12 @@ class WithdrawRequestSerializer(serializers.ModelSerializer):
         model = WithdrawRequest
         fields = "__all__"
         read_only_fields = ("created", "updated")
+
+    def validate(self, attrs):
+        account = attrs["account"]
+        amount = attrs["amount"]
+
+        if account.balance() - account.pending_withdrawal_amount < amount:
+            raise serializers.ValidationError("insufficient funds on account")
+
+        return attrs
