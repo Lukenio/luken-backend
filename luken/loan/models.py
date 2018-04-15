@@ -77,6 +77,10 @@ class LoanApplication(models.Model):
         on_delete=models.PROTECT, null=True
     )
     email = models.EmailField(blank=True)
+    partner = models.ForeignKey(
+        "partners.Partner", related_name="loan_applications",
+        on_delete=models.PROTECT, null=True
+    )
     loaned_amount = models.DecimalField(decimal_places=2, max_digits=20)
     crypto_collateral = models.DecimalField(decimal_places=8, max_digits=20)
     crypto_price_usd = models.DecimalField(decimal_places=2, max_digits=20)
