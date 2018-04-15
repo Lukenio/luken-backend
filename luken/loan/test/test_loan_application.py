@@ -14,10 +14,7 @@ from rest_framework.test import (
 )
 
 from luken.users.models import User
-from luken.partners.models import (
-    Partner,
-    PartnerToken
-)
+from luken.partners.models import Partner
 
 from ..models import LoanApplication
 
