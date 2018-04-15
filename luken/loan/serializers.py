@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import NotFound
 
 from luken.utils.bitcoin_price import get_bitcoin_price
 
@@ -24,7 +25,7 @@ class LoanApplicationSerializer(serializers.ModelSerializer):
                                    max_value=1.0,
                                    min_value=0.1)
 
-    partner_token = serializers.UUIDField()
+    partner_token = serializers.UUIDField(required=False)
 
     class Meta:
         model = LoanApplication
@@ -49,9 +50,12 @@ class LoanApplicationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["crypto_price_usd"] = get_bitcoin_price()
 
-        partner_token = validated_data.pop("partner_token")
+        partner_token = validated_data.pop("partner_token", None)
         if partner_token:
-            partner = PartnerToken.objects.get(pk=partner_token).partner
-            validated_data["partner"] = partner
+            try:
+                partner = PartnerToken.objects.get(pk=partner_token).partner
+                validated_data["partner"] = partner
+            except PartnerToken.DoesNotExist:
+                raise NotFound(detail="provided partner token is not found")
 
         return LoanApplication.objects.create(**validated_data)
