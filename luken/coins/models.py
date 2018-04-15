@@ -65,7 +65,7 @@ class CoinAccount(models.Model):
     @property
     def pending_withdrawal_amount(self):
         pending_amount = self.withdrawrequest_set.all().aggregate(Sum("amount"))
-        pending_amount = pending_amount["amount__sum"]
+        pending_amount = pending_amount["amount__sum"] or 0
         return pending_amount
 
 
