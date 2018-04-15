@@ -6,6 +6,7 @@ from .models import CoinAccount, WithdrawRequest
 class CoinAccountSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
     balance = serializers.ReadOnlyField()
+    pending_withdrawal_request = serializers.ReadOnlyField(source='pending_withdrawal_amount')
 
     class Meta:
         model = CoinAccount
