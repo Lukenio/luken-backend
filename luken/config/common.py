@@ -230,3 +230,7 @@ class Common(Configuration):
 
     LOGIN_URL = 'rest_framework:login'
     LOGOUT_URL = 'rest_framework:logout'
+
+    BLOCKCHAIN_XPUB = os.getenv("DJANGO_BLOCKCHAIN_XPUB")
+    BLOCKCHAIN_API_KEY = os.getenv("DJANGO_BLOCKCHAIN_API_KEY")
+    BLOCKCHAIN_CALLBACK_SECRET = os.getenv("DJANGO_BLOCKCHAIN_CALLBACK_SECRET")

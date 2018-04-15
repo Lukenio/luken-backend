@@ -7,6 +7,9 @@ services:
     restart: always
     environment:
       - DJANGO_SECRET_KEY=local
+      - DJANGO_BLOCKCHAIN_API_KEY=aa85ccb8-c182-4718-8acf-66137ee918e1
+      - DJANGO_BLOCKCHAING_XPUB=1hNapz1CuH4DhnV1DFHH7hafwDE8FJRheA
+      - DJANGO_BLOCKCHAIN_CALLBACK_SECRET=test-secret
     image: web
     build: ./
     command: >
