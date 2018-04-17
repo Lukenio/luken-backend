@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.urls import reverse_lazy
+from django.urls import reverse
 
 from blockchain.v2 import receive
 
@@ -30,7 +30,8 @@ class BitcoinBackend(CoinBackendBase):
     Bitcoin backend
     """
     def get_address(self, tracking_id):
-        url = reverse_lazy('coin-accounts-process-transaction', args=[tracking_id])
+        url = reverse('coin-accounts-process-transaction', args=[tracking_id])
+        url = settings.HOST_URL + url
         callback_url = update_url_query_params(url, secret=settings.BLOCKCHAIN_CALLBACK_SECRET)
 
         r = receive.receive(settings.BLOCKCHAIN_XPUB, callback_url, settings.BLOCKCHAIN_API_KEY)

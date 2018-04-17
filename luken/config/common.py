@@ -234,3 +234,5 @@ class Common(Configuration):
     BLOCKCHAIN_XPUB = os.getenv("DJANGO_BLOCKCHAIN_XPUB")
     BLOCKCHAIN_API_KEY = os.getenv("DJANGO_BLOCKCHAIN_API_KEY")
     BLOCKCHAIN_CALLBACK_SECRET = os.getenv("DJANGO_BLOCKCHAIN_CALLBACK_SECRET")
+
+    HOST_URL = os.getenv("DJANGO_HOSTNAME", "http://localhost")
