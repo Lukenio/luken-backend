@@ -35,8 +35,23 @@ class Production(Common):
     EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 
     DEFAULT_FROM_EMAIL = "you@herokuapp.com"
-
     ANYMAIL = {
         "MAILGUN_API_KEY": os.getenv('MAILGUN_API_KEY'),
         "MAILGUN_SENDER_DOMAIN": os.getenv('MAILGUN_DOMAIN')
+    }
+
+    REST_REGISTRATION = {
+        'REGISTER_VERIFICATION_ENABLED': True,
+        "REGISTER_VERIFICATION_URL": "https://app.loanz.io/verify-account/",
+
+        'RESET_PASSWORD_VERIFICATION_URL':
+            'https://app.loanz.io/reset-password/',
+
+        'REGISTER_EMAIL_VERIFICATION_ENABLED': True,
+        'VERIFICATION_FROM_EMAIL': 'no-reply@loanz.io',
+        "REGISTER_EMAIL_VERIFICATION_URL":
+            "https://app.loanz.io/reset-password/verify-email/",
+
+        "PROFILE_SERIALIZER_CLASS":
+            "luken.users.serializers.UserProfileSerializer"
     }
