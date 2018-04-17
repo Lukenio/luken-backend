@@ -6,7 +6,7 @@ from rest_framework import (
 )
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.exceptions import ParseError
 from rest_framework.status import HTTP_200_OK
@@ -39,7 +39,7 @@ class CoinAccountViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
     queryset = CoinAccount.objects.all()
     serializer_class = CoinAccountSerializer
 
-    @detail_route(methods=['post'])
+    @action(methods=['post'], detail=True)
     def withdraw_request(self, request, pk=None):
         data = dict(request.data)
         data["account"] = pk
@@ -49,7 +49,7 @@ class CoinAccountViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
             serializer.create(serializer.validated_data)
             return Response(request.data)
 
-    @detail_route(methods=["get", "post"])
+    @action(methods=["get", "post"], detail=True)
     def process_transaction(self, request, pk):
         if request.GET.get("secret") != settings.BLOCKCHAIN_CALLBACK_SECRET:
             raise ParseError()
