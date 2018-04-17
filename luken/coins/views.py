@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.conf import settings
 
 from rest_framework import (
@@ -11,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ParseError
 from rest_framework.status import HTTP_200_OK
 
+from luken.utils.bitcoin_price import get_bitcoin_price
 from luken.utils.views import PermissionByActionMixin
 
 from .models import (
@@ -59,10 +62,14 @@ class CoinAccountViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
         except (KeyError, ValueError):
             raise ParseError("bad or missing value")
 
-        value_in_btc = value_in_satoshi / 100000000
+        value_in_btc = Decimal(value_in_satoshi / 100000000)
 
         account = get_object_or_404(CoinAccount.objects.all(), pk=pk)
+        value_in_usd = get_bitcoin_price() * value_in_btc
 
-        Transaction.objects.create(account=account, type=Transaction.RECEIVED, amount=value_in_btc)
+        Transaction.objects.create(
+            account=account, type=Transaction.RECEIVED,
+            amount=value_in_btc, value_usd=value_in_usd
+        )
 
         return Response(status=HTTP_200_OK)

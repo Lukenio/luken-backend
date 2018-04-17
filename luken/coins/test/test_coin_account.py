@@ -7,6 +7,7 @@ from django.urls import (
     reverse_lazy,
     resolve,
 )
+from django.conf import settings
 from django_dynamic_fixture import G
 from rest_framework import status
 from rest_framework.test import (
@@ -78,3 +79,17 @@ class CreateCoinAccountTestCase(BaseCoinAccountTestCase):
         request = self.factory.post(url, request_data, format="json")
         response = view.func(request, pk=acc.id)
         response.render()
+
+    def test_process_transaction(self):
+        acc = G(CoinAccount)
+        url = reverse_lazy('coin-accounts-process-transaction', args=[acc.id])
+        view = resolve(url)
+        request = self.factory.get(url, {
+            "secret": settings.BLOCKCHAIN_CALLBACK_SECRET,
+            "value": 1000000
+        })
+        response = view.func(request, pk=acc.id)
+        response.render()
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
+        self.assertEqual(Transaction.objects.filter(account=acc, type=Transaction.RECEIVED).count(), 1)
