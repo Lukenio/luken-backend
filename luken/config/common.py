@@ -236,3 +236,8 @@ class Common(Configuration):
     BLOCKCHAIN_CALLBACK_SECRET = os.getenv("DJANGO_BLOCKCHAIN_CALLBACK_SECRET")
 
     HOST_URL = os.getenv("DJANGO_HOSTNAME", "http://localhost")
+
+    COIN_BACKENDS = {
+        "Bitcoin": "luken.coins.services.BitcoinBackend",
+        "Ethereum": "luken.coins.services.EthereumBackend",
+    }

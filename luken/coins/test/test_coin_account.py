@@ -1,5 +1,8 @@
 from decimal import Decimal
-from django.test import TestCase
+from django.test import (
+    TestCase,
+    override_settings
+)
 from django.urls import (
     reverse_lazy,
     resolve,
@@ -16,6 +19,10 @@ from luken.users.models import User
 from ..models import CoinAccount, Transaction
 
 
+@override_settings(COIN_BACKENDS={
+    "Bitcoin": "luken.coins.test.TestBackend",
+    "Ethereum": "luken.coins.test.TestBackend"
+})
 class BaseCoinAccountTestCase(TestCase):
     view_name = None
 

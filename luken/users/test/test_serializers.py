@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.forms.models import model_to_dict
 from django.contrib.auth.hashers import check_password
 from nose.tools import eq_, ok_
@@ -6,6 +6,10 @@ from .factories import UserFactory
 from ..serializers import CreateUserSerializer
 
 
+@override_settings(COIN_BACKENDS={
+    "Bitcoin": "luken.coins.test.TestBackend",
+    "Ethereum": "luken.coins.test.TestBackend"
+})
 class TestCreateUserSerializer(TestCase):
 
     def setUp(self):
