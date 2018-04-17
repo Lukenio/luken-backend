@@ -1,9 +1,9 @@
-from urllib import parse
-
 from django.conf import settings
 from django.urls import reverse_lazy
 
 from blockchain.v2 import receive
+
+from luken.utils.url import update_url_query_params
 
 BITCOIN_TYPE = "Bitcoin"
 ETHEREUM_TYPE = "Ethereum"
@@ -31,13 +31,7 @@ class BitcoinBackend(CoinBackendBase):
     """
     def get_address(self, tracking_id):
         url = reverse_lazy('coin-accounts-process-transaction', args=[tracking_id])
-        url_parts = list(parse.urlparse(url))
-
-        query = dict(parse.parse_qsl(url_parts[4]))
-        query.update({"secret": settings.BLOCKCHAIN_CALLBACK_SECRET})
-
-        url_parts[4] = parse.urlencode(query)
-        callback_url = parse.urlunparse(url_parts)
+        callback_url = update_url_query_params(url, secret=settings.BLOCKCHAIN_CALLBACK_SECRET)
 
         r = receive.receive(settings.BLOCKCHAIN_XPUB, callback_url, settings.BLOCKCHAIN_API_KEY)
         return r.address
