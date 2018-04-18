@@ -1,7 +1,7 @@
 import json
 
 from django.core import mail
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import (
     reverse_lazy,
     resolve,
@@ -19,6 +19,10 @@ from luken.partners.models import Partner
 from ..models import LoanApplication
 
 
+@override_settings(COIN_BACKENDS={
+    "Bitcoin": "luken.coins.test.TestBackend",
+    "Ethereum": "luken.coins.test.TestBackend"
+})
 class BaseLoanApplicationTestCase(TestCase):
     view_name = None
 
@@ -30,7 +34,7 @@ class BaseLoanApplicationTestCase(TestCase):
         self.view = resolve(self.view_url)
 
 
-class CreateCoinAccountTestCase(BaseLoanApplicationTestCase):
+class CreateLoanApplicationTestCase(BaseLoanApplicationTestCase):
     view_name = "loan-applications-list"
 
     def setUp(self):

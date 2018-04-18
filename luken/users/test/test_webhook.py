@@ -1,9 +1,13 @@
 import json
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from .factories import UserFactory
 
 
+@override_settings(COIN_BACKENDS={
+    "Bitcoin": "luken.coins.test.TestBackend",
+    "Ethereum": "luken.coins.test.TestBackend"
+})
 class WebhookTestCase(TestCase):
 
     def test_webhook_successfull(self):

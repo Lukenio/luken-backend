@@ -27,16 +27,6 @@ class CoinAccount(models.Model):
     def __str__(self):
         return f"{self.user} - {self.name} - {self.get_type_display()}"
 
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            type_display = self.get_type_display()
-
-            coin_backend = get_coin_backend(type_display)
-
-            self.pub_address = coin_backend.get_address(self.user.id)
-
-        super().save(*args, **kwargs)
-
     @classmethod
     def assign_default_accounts_to_new_user(cls, sender, instance, created, **kwargs):
         if not created:
@@ -50,6 +40,16 @@ class CoinAccount(models.Model):
                 name=f"Default {description} account",
                 type=db_type,
             )
+
+    @classmethod
+    def assign_pub_address(cls, sender, instance, created, **kwargs):
+        if not created:
+            return
+
+        type_display = instance.get_type_display()
+        coin_backend = get_coin_backend(type_display)
+        instance.pub_address = coin_backend.get_address(instance.id)
+        instance.save()
 
     def balance(self):
         received_amount = self.transactions\
@@ -102,3 +102,4 @@ models.signals.post_save.connect(
     CoinAccount.assign_default_accounts_to_new_user,
     sender=settings.AUTH_USER_MODEL
 )
+models.signals.post_save.connect(CoinAccount.assign_pub_address, sender=CoinAccount)
