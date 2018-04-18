@@ -14,6 +14,7 @@ from rest_framework.test import (
 )
 
 from luken.users.models import User
+from luken.partners.models import Partner
 
 from ..models import LoanApplication
 
@@ -207,3 +208,17 @@ class CreateLoanApplicationTestCase(BaseLoanApplicationTestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertTrue("Declined" in mail.outbox[0].body)
         mail.outbox.clear()
+
+    def test_assign_partner_if_token_provided(self):
+        partner = G(Partner)
+        token = partner.tokens.first().id
+        loan_app_request = dict(self.valid_unauthorized, partner_token=token)
+
+        request = self.factory.post(self.view_url, loan_app_request, format="json")
+        response = self.view.func(request)
+
+        response.render()
+        loan_app = json.loads(response.content)
+        loan_app = LoanApplication.objects.get(id=loan_app["id"])
+
+        self.assertEqual(loan_app.partner, partner)
