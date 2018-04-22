@@ -27,8 +27,17 @@
 	<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top: 0px; padding-bottom: 5px;"><![endif]-->
 	<div style="line-height:120%;color:#555555;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 0px; padding-left: 0px; padding-top: 0px; padding-bottom: 5px;">
 		<div style="line-height:14px;font-size:12px;color:#555555;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;text-align:left;">
-		  <p style="margin: 0;line-height: 14px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 21px;"><strong>Your login info: &nbsp;{% if loan.email %}{{ loan.email }}{% else %}{{ loan.user.email }}{% endif %}.
-              Please, request password reset at website.</strong></span>&nbsp;</p>
+		  <p style="margin: 0;line-height: 14px;text-align: center;font-size: 12px">
+			  <span style="font-size: 18px; line-height: 21px;">
+				  <strong>
+					  Your login is: &nbsp;{% if loan.email %}{{ loan.email }}{% else %}{{ loan.user.email }}{% endif %}.
+					  <br>
+					  And password: {{password}}
+					  <br>
+					  Please login here: <a href="http://app.loanz.io/login/">http://app.loanz.io/login/</a>
+				  </strong>
+			  </span>&nbsp;
+		  </p>
 		</div>
 	</div>
 	<!--[if mso]></td></tr></table><![endif]-->

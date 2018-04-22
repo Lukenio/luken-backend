@@ -45,3 +45,4 @@ boto3==1.5.31
 django-anymail[mailgun]==1.4
 coinmarketcap>=4.2,<4.3
 blockchain>=1.4,<1.5
+pusher==1.7.4

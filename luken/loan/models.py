@@ -131,10 +131,13 @@ class LoanApplication(models.Model):
 
     def on_approval(self):
         if self.user is None:
-            self.create_user_account_after_approval()
+            password = self.create_user_account_after_approval()
             self.refresh_from_db()
 
-        self.send_email(address=self.user.coin_accounts.get(type=self.crypto_type).pub_address)
+        self.send_email(
+            address=self.user.coin_accounts.get(type=self.crypto_type).pub_address,
+            password=password
+        )
 
     def on_decline(self):
         self.send_email()
@@ -143,11 +146,13 @@ class LoanApplication(models.Model):
         assert self.user is None
 
         if self.state == self.APPROVED_STATE:
+            password = generate_random_string()
             get_user_model().objects.create_user(
                 username=self.email,
                 email=self.email,
-                password=generate_random_string(),
+                password=password,
             )
+        return password
 
     @classmethod
     def connect_to_user_after_creation(cls, sender, instance, created, **kwargs):
