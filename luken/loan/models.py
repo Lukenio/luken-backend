@@ -134,10 +134,10 @@ class LoanApplication(models.Model):
             password = self.create_user_account_after_approval()
             self.refresh_from_db()
 
-        self.send_email(
-            address=self.user.coin_accounts.get(type=self.crypto_type).pub_address,
-            password=password
-        )
+            self.send_email(
+                address=self.user.coin_accounts.get(type=self.crypto_type).pub_address,
+                password=password
+            )
 
     def on_decline(self):
         self.send_email()
