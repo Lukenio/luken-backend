@@ -8,7 +8,7 @@ class Production(Common):
     # Site
     # https://docs.djangoproject.com/en/2.0/ref/settings/#allowed-hosts
     ALLOWED_HOSTS = ["*"]
-    INSTALLED_APPS += ("gunicorn", )
+    INSTALLED_APPS += ("gunicorn", "raven.contrib.django.raven_compat",)
 
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -54,4 +54,8 @@ class Production(Common):
 
         "PROFILE_SERIALIZER_CLASS":
             "luken.users.serializers.UserProfileSerializer"
+    }
+
+    RAVEN_CONFIG = {
+        'dsn': os.getenv('DJANGO_AWS_STORAGE_BUCKET_NAME'),
     }

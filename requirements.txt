@@ -28,6 +28,7 @@ mkdocs==0.17.2
 flake8==3.5.0
 django-rest-swagger==2.1.2
 django-cors-headers==2.1.0
+raven==6.7.0
 
 # Testing
 mock==2.0.0
