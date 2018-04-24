@@ -8,6 +8,7 @@ from .serializers import CreateUserSerializer, UserSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse, HttpResponseBadRequest
+from pusher import Pusher
 
 
 logger = logging.getLogger(__name__)
@@ -37,7 +38,7 @@ class UserCreateViewSet(mixins.CreateModelMixin,
 @require_POST
 @csrf_exempt
 def kyc_webhook(request):
-    from luken.pusher import pusher_client
+    pusher_client = Pusher.from_env()
     data = request.POST.dict()
 
     if data.get('rawRequest'):
@@ -49,7 +50,7 @@ def kyc_webhook(request):
         kyc.user.kyc_applied = True
         kyc.user.save()
 
-        pusher_client.trigger(user_id, 'kyc-submitted', data)
+        pusher_client.trigger(user_id, 'kyc-done', data)
 
         return HttpResponse('Ok')
 

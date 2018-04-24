@@ -242,5 +242,3 @@ class Common(Configuration):
         "Bitcoin": "luken.coins.services.BitcoinBackend",
         "Ethereum": "luken.coins.services.EthereumBackend",
     }
-
-    PUSHER_URL = os.getenv("PUSHER_URL")
