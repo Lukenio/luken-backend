@@ -13,7 +13,7 @@ class WebhookTestCase(TestCase):
     def test_webhook_successfull(self):
         user = UserFactory()
         self.client.post(reverse('kyc_webhook'), {
-            'rawRequest': json.dumps({"q14_userid": str(user.pk)})})
+            'rawRequest': json.dumps({"q15_userid": str(user.pk)})})
 
         kyc = user.kyc_set.first()
         user.refresh_from_db()
