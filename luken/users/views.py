@@ -1,3 +1,4 @@
+import logging
 import json
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import AllowAny
@@ -7,6 +8,9 @@ from .serializers import CreateUserSerializer, UserSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse, HttpResponseBadRequest
+
+
+logger = logging.getLogger(__name__)
 
 
 class UserViewSet(mixins.RetrieveModelMixin,
@@ -37,7 +41,11 @@ def kyc_webhook(request):
 
     if data.get('rawRequest'):
         data = json.loads(data['rawRequest'])
-        print(data)
+
+        logger.error(data['rawRequest'], exc_info=True, extra={
+            'request': request,
+        })
+
         user_id = data['q14_userid']
         kyc = KYC.objects.create(jot_form_data=data, user_id=user_id)
 
