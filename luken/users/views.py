@@ -42,11 +42,7 @@ def kyc_webhook(request):
     if data.get('rawRequest'):
         data = json.loads(data['rawRequest'])
 
-        logger.error(data['rawRequest'], exc_info=True, extra={
-            'request': request,
-        })
-
-        user_id = data['q14_userid']
+        user_id = data['q15_userid']
         kyc = KYC.objects.create(jot_form_data=data, user_id=user_id)
 
         kyc.user.kyc_applied = True
