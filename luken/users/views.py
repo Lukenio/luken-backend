@@ -37,6 +37,7 @@ class UserCreateViewSet(mixins.CreateModelMixin,
 @require_POST
 @csrf_exempt
 def kyc_webhook(request):
+    from luken.pusher import pusher_client
     data = request.POST.dict()
 
     if data.get('rawRequest'):
@@ -47,6 +48,8 @@ def kyc_webhook(request):
 
         kyc.user.kyc_applied = True
         kyc.user.save()
+
+        pusher_client.trigger(user_id, 'kyc-submitted', data)
 
         return HttpResponse('Ok')
 
