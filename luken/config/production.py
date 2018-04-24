@@ -57,5 +57,5 @@ class Production(Common):
     }
 
     RAVEN_CONFIG = {
-        'dsn': os.getenv('DJANGO_AWS_STORAGE_BUCKET_NAME'),
+        'dsn': os.getenv('SENTRY_DSN'),
     }
