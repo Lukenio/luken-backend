@@ -13,6 +13,8 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ParseError
 from rest_framework.status import HTTP_200_OK
 
+from pusher import Pusher
+
 from luken.utils.bitcoin_price import get_bitcoin_price
 from luken.utils.views import PermissionByActionMixin
 
@@ -71,5 +73,12 @@ class CoinAccountViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
             account=account, type=Transaction.RECEIVED,
             amount=value_in_btc, value_usd=value_in_usd
         )
+
+        serializer = self.get_serializer(account)
+
+        pusher_client = Pusher.from_env()
+
+        pusher_client.trigger(
+            str(account.user.pk), 'account-changes', serializer.data)
 
         return Response(status=HTTP_200_OK)

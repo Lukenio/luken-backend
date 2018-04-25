@@ -1,4 +1,5 @@
 import json
+import mock
 
 from decimal import Decimal
 from django.test import (
@@ -90,7 +91,8 @@ class CreateCoinAccountTestCase(BaseCoinAccountTestCase):
         response.render()
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
 
-    def test_process_transaction(self):
+    @mock.patch('luken.coins.views.Pusher')
+    def test_process_transaction(self, pusher_mock):
         acc = G(CoinAccount)
         url = reverse_lazy('coin-accounts-process-transaction', args=[acc.id])
         view = resolve(url)
@@ -103,6 +105,8 @@ class CreateCoinAccountTestCase(BaseCoinAccountTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.content)
         self.assertEqual(Transaction.objects.filter(account=acc, type=Transaction.RECEIVED).count(), 1)
+
+        pusher_mock.from_env.return_value.trigger.assert_called()
 
     def test_error_if_withdrawal_amount_is_greater_than_account_amount(self):
         withdraw_amount = 2.1

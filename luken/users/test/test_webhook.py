@@ -22,5 +22,5 @@ class WebhookTestCase(TestCase):
 
         self.assertEquals(kyc.user.pk, user.pk)
         self.assertTrue(user.kyc_applied)
-        
+
         pusher_mock.from_env.return_value.trigger.assert_called()
