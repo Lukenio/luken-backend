@@ -93,4 +93,4 @@ class CoinAccountViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
         pusher_client.trigger(
             str(account.user.pk), 'account-changes', serializer.data)
 
-        return Response(status=HTTP_200_OK)
+        return Response('*ok*', status=HTTP_200_OK, content_type='text/plain')
