@@ -98,7 +98,8 @@ class CreateCoinAccountTestCase(BaseCoinAccountTestCase):
         view = resolve(url)
         request = self.factory.get(url, {
             "secret": settings.BLOCKCHAIN_CALLBACK_SECRET,
-            "value": 1000000
+            "value": 1000000,
+            "transaction_hash": "somehashhere"
         })
         response = view.func(request, pk=acc.id)
         response.render()
