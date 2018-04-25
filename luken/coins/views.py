@@ -3,6 +3,7 @@ from uuid import UUID
 from decimal import Decimal
 
 from django.conf import settings
+from django.core.serializers.json import DjangoJSONEncoder
 
 from rest_framework import (
     viewsets,
@@ -28,12 +29,12 @@ from .permissions import OwnerOnly
 from .serializers import CoinAccountSerializer, WithdrawRequestSerializer
 
 
-class UUIDEncoder(json.JSONEncoder):
+class UUIDEncoder(DjangoJSONEncoder):
     def default(self, obj):
         if isinstance(obj, UUID):
             # if the obj is uuid, we simply return the value of uuid
             return obj.hex
-        return json.JSONEncoder.default(self, obj)
+        return DjangoJSONEncoder.default(self, obj)
 
 
 class ModelCreateViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
