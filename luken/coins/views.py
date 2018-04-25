@@ -1,3 +1,5 @@
+import json
+from uuid import UUID
 from decimal import Decimal
 
 from django.conf import settings
@@ -24,6 +26,14 @@ from .models import (
 )
 from .permissions import OwnerOnly
 from .serializers import CoinAccountSerializer, WithdrawRequestSerializer
+
+
+class UUIDEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, UUID):
+            # if the obj is uuid, we simply return the value of uuid
+            return obj.hex
+        return json.JSONEncoder.default(self, obj)
 
 
 class ModelCreateViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
@@ -61,6 +71,7 @@ class CoinAccountViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
 
         try:
             value_in_satoshi = int(request.GET["value"])
+            transaction_hash = request.GET["transaction_hash"]
         except (KeyError, ValueError):
             raise ParseError("bad or missing value")
 
@@ -71,12 +82,13 @@ class CoinAccountViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
 
         Transaction.objects.create(
             account=account, type=Transaction.RECEIVED,
-            amount=value_in_btc, value_usd=value_in_usd
+            amount=value_in_btc, value_usd=value_in_usd,
+            address=transaction_hash
         )
 
         serializer = self.get_serializer(account)
 
-        pusher_client = Pusher.from_env()
+        pusher_client = Pusher.from_env(json_encoder=UUIDEncoder)
 
         pusher_client.trigger(
             str(account.user.pk), 'account-changes', serializer.data)
