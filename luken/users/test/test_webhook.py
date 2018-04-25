@@ -11,8 +11,8 @@ import mock
 })
 class WebhookTestCase(TestCase):
 
-    @mock.patch('')
-    def test_webhook_successfull(self):
+    @mock.patch('luken.users.views.Pusher')
+    def test_webhook_successfull(self, pusher_mock):
         user = UserFactory()
         self.client.post(reverse('kyc_webhook'), {
             'rawRequest': json.dumps({"q15_userid": str(user.pk)})})
@@ -22,3 +22,5 @@ class WebhookTestCase(TestCase):
 
         self.assertEquals(kyc.user.pk, user.pk)
         self.assertTrue(user.kyc_applied)
+        
+        pusher_mock.from_env.return_value.trigger.assert_called()
