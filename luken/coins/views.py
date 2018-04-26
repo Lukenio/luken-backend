@@ -10,7 +10,7 @@ from rest_framework import (
 )
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import detail_route, renderer_classes
+from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from rest_framework.exceptions import ParseError
 from rest_framework.status import HTTP_200_OK
