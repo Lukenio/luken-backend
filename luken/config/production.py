@@ -40,6 +40,19 @@ class Production(Common):
         "MAILGUN_SENDER_DOMAIN": os.getenv('MAILGUN_DOMAIN')
     }
 
+    # Django Rest Framework
+    REST_FRAMEWORK = {
+        'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+        'PAGE_SIZE': int(os.getenv('DJANGO_PAGINATION_LIMIT', 10)),
+        'DATETIME_FORMAT': '%Y-%m-%dT%H:%M:%S%z',
+        'DEFAULT_RENDERER_CLASSES': (
+            'rest_framework.renderers.JSONRenderer'
+        ),
+        'DEFAULT_AUTHENTICATION_CLASSES': (
+            'rest_framework.authentication.TokenAuthentication',
+        )
+    }
+
     REST_REGISTRATION = {
         'REGISTER_VERIFICATION_ENABLED': True,
         "REGISTER_VERIFICATION_URL": "https://app.loanz.io/verify-account/",
