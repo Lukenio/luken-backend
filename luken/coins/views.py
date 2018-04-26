@@ -74,7 +74,7 @@ class CoinAccountViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
             return Response(request.data)
 
     @detail_route(methods=["get", "post"])
-    @renderer_classes(PlainTextRenderer)
+    @renderer_classes((PlainTextRenderer,) )
     def process_transaction(self, request, pk):
         if request.GET.get("secret") != settings.BLOCKCHAIN_CALLBACK_SECRET:
             raise ParseError()
