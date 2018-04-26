@@ -10,10 +10,11 @@ from rest_framework import (
 )
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import detail_route, renderer_classes
 from rest_framework.response import Response
 from rest_framework.exceptions import ParseError
 from rest_framework.status import HTTP_200_OK
+from rest_framework import renderers
 
 from pusher import Pusher
 
@@ -26,6 +27,14 @@ from .models import (
 )
 from .permissions import OwnerOnly
 from .serializers import CoinAccountSerializer, WithdrawRequestSerializer
+
+
+class PlainTextRenderer(renderers.BaseRenderer):
+    media_type = 'text/plain'
+    format = 'txt'
+
+    def render(self, data, media_type=None, renderer_context=None):
+        return data.encode(self.charset)
 
 
 class UUIDEncoder(DjangoJSONEncoder):
@@ -65,6 +74,7 @@ class CoinAccountViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
             return Response(request.data)
 
     @detail_route(methods=["get", "post"])
+    @renderer_classes(PlainTextRenderer)
     def process_transaction(self, request, pk):
         if request.GET.get("secret") != settings.BLOCKCHAIN_CALLBACK_SECRET:
             raise ParseError()
