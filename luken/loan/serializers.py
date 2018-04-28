@@ -27,10 +27,13 @@ class LoanApplicationSerializer(serializers.ModelSerializer):
 
     partner_token = serializers.UUIDField(required=False)
 
+    maturity_date = serializers.DateTimeField(source='get_maturity_date',
+                                              read_only=True)
+
     class Meta:
         model = LoanApplication
         fields = "__all__"
-        read_only_fields = ("user", "state", "crypto_price_usd")
+        read_only_fields = ("user", "state", "crypto_price_usd", "maturity_date")
 
     def validate(self, attrs):
         user = self.context["request"].user
