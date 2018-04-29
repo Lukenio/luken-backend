@@ -2,42 +2,22 @@
 
 {% load static %}
 
+
+{% block teaser %}
+   We received your loan application. We will send you another email after we look at numbers.
+{% endblock %}
+
+
 {% block content %}
+		  We received your loan application.
 
-                        <div class="">
-	<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 30px; padding-left: 30px; padding-top: 30px; padding-bottom: 15px;"><![endif]-->
-	<div style="line-height:150%;color:#E0733A;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 30px; padding-left: 30px; padding-top: 30px; padding-bottom: 15px;">
-		<div style="line-height:18px;font-size:12px;color:#1c91f2;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;text-align:left;">
-		  <p style="margin: 0;font-size: 12px;text-align: center;line-height: 18px"><span style="line-height: 18px; font-size: 12px;"><span style="text-align: left; background-color: transparent; font-size: 24px; line-height: 36px;"><strong>Your Loan Application Received</strong></span></span></p></div>
-	</div>
-	<!--[if mso]></td></tr></table><![endif]-->
-</div>
-
-
-                    <div class="">
-	<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top: 0px; padding-bottom: 5px;"><![endif]-->
-	<div style="line-height:120%;color:#555555;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 0px; padding-left: 0px; padding-top: 0px; padding-bottom: 5px;">
-		<div style="line-height:26px;font-size:12px;color:#555555;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;text-align:left;"><p style="margin: 0;line-height: 14px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 26px;"><strong>Your Requested Loan Amount is ${{ loan.loaned_amount }}
-</strong></span></p>
-		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"> <strong> Term: {{ loan.get_terms_month_display }}</strong></span></p>
-		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>APR: {{ loan.get_approval_prob_percent }}%</strong></span></p>
-		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>Your Total Loan Amount* is ${{ loan.total_loaned_amount }}</strong></span></p>
-		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>Your Total Collateral Amount is {{ loan.crypto_collateral }} {{ loan.get_crypto_type_display }}</strong></span></p>
-		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 14px;"><strong>Your Loan Maturity date is {{ loan.get_maturity_date }}</strong></span></p>
-
-		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px">&nbsp;</p>
-		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px"><span style="font-size: 18px; line-height: 26px;"><strong> Thank you for submitting your request. We are looking on it now. After we verify it, we will send you another email with next steps.</strong></span></p>
-		  <p style="margin: 0;line-height: 26px;text-align: center;font-size: 12px">&nbsp;</p>
-		</div>
-	</div>
-	<!--[if mso]></td></tr></table><![endif]-->
-
-                        <div class="">
-        <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 30px;"><![endif]-->
-        <div style="line-height:150%;color:#989898;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif; padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 30px;">
-            <div style="font-size:12px;line-height:18px;color:#989898;font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;text-align:left;"><p style="margin: 0;font-size: 14px;line-height: 21px;text-align: center">© 2018 LOANZ.IO, All rights reserved. <br>Email: info@loanz.io&#160; Toll Free: 1-833-534-2255</p></div>
-        </div>
-        <!--[if mso]></td></tr></table><![endif]-->
-    </div>
-
+		   Your Requested Loan Amount is ${{ loan.loaned_amount }}
+		   Term: {{ loan.get_terms_month_display }}
+		   APR: {{ loan.get_approval_prob_percent }}%
+		   Total Loan Amount* is ${{ loan.total_loaned_amount }}
+		   Total Collateral Amount is {{ loan.crypto_collateral }} {{ loan.get_crypto_type_display }}
+		   Loan Maturity date is {{ loan.get_maturity_date }}
+           <br>
+           <br>
+          Thank you for submitting your request. We are looking on it now. After we verify it, we will send you another email with next steps.
 {% endblock %}
