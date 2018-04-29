@@ -10,13 +10,19 @@
 
 {% block content %}
 		  We received your loan application.
-
-		   Your Requested Loan Amount is ${{ loan.loaned_amount }}
+           <br>
+		   Your Requested Loan Amount is ${{ loan.loaned_amount }}.
+           <br>
 		   Term: {{ loan.get_terms_month_display }}
+           <br>
 		   APR: {{ loan.get_approval_prob_percent }}%
+           <br>
 		   Total Loan Amount* is ${{ loan.total_loaned_amount }}
+           <br>
 		   Total Collateral Amount is {{ loan.crypto_collateral }} {{ loan.get_crypto_type_display }}
+           <br>
 		   Loan Maturity date is {{ loan.get_maturity_date }}
+           <br>
            <br>
            <br>
           Thank you for submitting your request. We are looking on it now. After we verify it, we will send you another email with next steps.
