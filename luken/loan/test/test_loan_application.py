@@ -166,10 +166,7 @@ class CreateLoanApplicationTestCase(BaseLoanApplicationTestCase):
         loan_app.save()
 
         self.assertEqual(len(mail.outbox), 1)
-        self.assertTrue(loan_app.get_crypto_type_display() in mail.outbox[0].body)
         self.assertTrue(loan_app.email in mail.outbox[0].body)
-        pub_address = loan_app.user.coin_accounts.get(type=loan_app.crypto_type).pub_address
-        self.assertTrue(pub_address in mail.outbox[0].body)
         mail.outbox.clear()
 
         loan_app.state = loan_app.DECLINED_STATE
