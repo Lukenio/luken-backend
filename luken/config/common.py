@@ -32,6 +32,7 @@ class Common(Configuration):
         "luken.coins",
         "luken.loan",
         "luken.partners",
+        "luken.xpub"
     )
 
     CORS_ORIGIN_ALLOW_ALL = True
