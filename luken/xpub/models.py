@@ -10,7 +10,9 @@ class WalletAddress(models.Model):
 
     type = models.SmallIntegerField(choices=NETWORKS)
     address = models.CharField(max_length=63)
-    path = models.CharField(max_length=31)
+    xpub = models.CharField(max_length=255)
+    derivation_path = models.CharField(max_length=31)
+    child = models.IntegerField()
 
     def __str__(self):
         return f"{self.type} - {self.address}"
