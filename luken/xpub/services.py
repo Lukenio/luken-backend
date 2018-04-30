@@ -1,6 +1,10 @@
-from .models import WalletAddress
+from django.conf import settings
+from django.urls import reverse
 
 from luken.utils.txhash import create_tracker
+from luken.utils.url import update_url_query_params
+
+from .models import WalletAddress
 
 
 class WalletAddressBackendBase(object):
@@ -14,9 +18,14 @@ class WalletAddressBackendBase(object):
 
     def get_address(self, tracking_id):
         wallet_address = WalletAddress.objects.generate(self.coin_type, tracking_id)
-        # TODO: generate this URL
-        # http://your.api.com/v1/transaction_received?sender=$sender&address=$address&amount=$amount&txhash=$txhash
-        callback_url = ""
+        callback_url = settings.HOST_URL + reverse("transaction-received-webhook")
+        callback_url = update_url_query_params(
+            callback_url,
+            sender="$sender",
+            address="$address",
+            amount="$amount",
+            txhash="$txhash"
+        )
         create_tracker(
             wallet_address.child, wallet_address.type,
             wallet_address.address, callback_url
