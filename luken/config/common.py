@@ -243,3 +243,5 @@ class Common(Configuration):
         "Bitcoin": "luken.coins.services.BitcoinBackend",
         "Ethereum": "luken.coins.services.EthereumBackend",
     }
+
+    TXHASH_API_KEY = os.getenv("DJANGO_TXHASH_API_KEY")
