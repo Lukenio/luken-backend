@@ -24,10 +24,16 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+    @property
+    def get_kyc(self):
+        kyc = self.kyc_set.all().order_by('-added').first()
+        return kyc.jot_form_data if kyc else None
+
 
 class KYC(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     jot_form_data = JSONField()
+    added = models.DateTimeField(auto_now_add=True)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

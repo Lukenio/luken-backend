@@ -33,6 +33,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
 
     coin_accounts = CoinAccountSerializer(many=True)
+    kyc = serializers.JSONField(source='get_kyc', read_only=True)
 
     def __init__(self, *args, **kwargs):
         user_class = get_user_model()
@@ -40,8 +41,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
         read_only_field_names = _get_field_names(allow_primary_key=True,
                                                  non_editable=True)
 
-        field_names += ('coin_accounts', )
-        read_only_field_names += ('coin_accounts', )
+        field_names += ('coin_accounts', 'kyc')
+        read_only_field_names += ('coin_accounts', 'kyc')
 
         class MetaObj(object):
             pass
