@@ -18,7 +18,14 @@ def create_tracker(name, coin, address, http_url, http_method="GET"):
             "httpMethod": http_method
         }
     }
-    r = requests.post(TRACKER_API_URL, json=payload, headers={"Authorization": f"Key {settings.TXHASH_API_KEY}"})
+    r = requests.post(TRACKER_API_URL,
+                      json=payload,
+                      headers={
+                          "Authorization": f"Key {settings.TXHASH_API_KEY}"
+                      })
+
     if r.status_code != 201:
-        raise RuntimeError(f"TXHASH returned unexpected status code - {r.status_code}")
+        raise RuntimeError(
+            f"TXHASH returned unexpected status code - {r.status_code}")
+
     return r.json()
