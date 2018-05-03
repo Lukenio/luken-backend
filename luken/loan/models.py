@@ -146,7 +146,7 @@ class LoanApplication(models.Model):
         assert self.user is None
 
         if self.state == self.APPROVED_STATE:
-            password = generate_random_string()
+            password = generate_random_string(length=8)
             get_user_model().objects.create_user(
                 username=self.email,
                 email=self.email,

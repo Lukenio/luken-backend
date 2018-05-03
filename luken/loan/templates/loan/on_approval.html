@@ -1,18 +1,18 @@
 {% extends "loan/base.html" %}
 
 {% block teaser %}
-   Application approved
+   Your Loan Application has been approved.
 {% endblock %}
 
 {% block content %}
 
-		  Your login is: &nbsp;<strong>{% if loan.email %}{{ loan.email }}{% else %}{{ loan.user.email }}{% endif %}.</strong>
-		  <br>
-		  And password: <strong>{{password}}</strong>
-		  <br>
-		  Please login here: <a href="http://app.loanz.io/login/">http://app.loanz.io/login/</a>
-          <br>
-          <br>
-          Contact us if you have any questions!
+Your Loan Application has been approved.
+Please use following information to proceed:
+<br>
+<br>
+Your login is: {% if loan.email %}{{ loan.email }}{% else %}{{ loan.user.email }}{% endif %}
+And password: {{password}}
+Please login here: <a href="http://app.loanz.io/login/">http://app.loanz.io/login/</a>
+Contact us if you have any questions!
 
 {% endblock %}

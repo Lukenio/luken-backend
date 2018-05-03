@@ -1,3 +1,8 @@
-Your login info: {% if loan.email %}{{ loan.email }}{% else %}{{ loan.user.email }}{% endif %}.
+Your Loan Application has been approved.
+Please use following information to proceed:
 
-Please, request password reset at website.
+
+Your login is: {% if loan.email %}{{ loan.email }}{% else %}{{ loan.user.email }}{% endif %}
+And password: {{password}}
+Please login here: <a href="http://app.loanz.io/login/">http://app.loanz.io/login/</a>
+Contact us if you have any questions!
