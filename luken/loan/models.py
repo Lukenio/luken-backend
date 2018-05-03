@@ -100,7 +100,15 @@ class LoanApplication(models.Model):
     def post_save_dispatch(cls, sender, instance, created, **kwargs):
         if created:
             instance.send_email()
-            return
+
+            # if user exists than attach loan to user right away
+            user_class = get_user_model()
+            try:
+                user = user_class.objects.get(email=instance.email)
+                instance.user = user
+                instance.save()
+            finally:
+                return
 
         latest = instance.get_latest_revision()
         if instance.state <= latest.field_dict["state"]:
