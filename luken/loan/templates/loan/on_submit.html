@@ -11,13 +11,20 @@
 {% block content %}
 
 We received your loan application.
+<br>
 Your Requested Loan Amount is ${{ loan.loaned_amount }}.
+<br>
 Term: {{ loan.get_terms_month_display }}
+<br>
 APR: {{ loan.get_approval_prob_percent }}%
+<br>
 Total Loan Amount* is ${{ loan.total_loaned_amount }}
+<br>
 Total Collateral Amount is {{ loan.crypto_collateral }} {{ loan.get_crypto_type_display }} Bitcoin
-Loan Maturity date is April 30, 2019, 8:53 p.m.
+<br>
+Loan Maturity date is {{ loan.get_maturity_date }}.
 
+<br>
 <br>
 <br>
 

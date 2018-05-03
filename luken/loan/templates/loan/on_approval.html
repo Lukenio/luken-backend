@@ -11,8 +11,11 @@ Please use following information to proceed:
 <br>
 <br>
 Your login is: {% if loan.email %}{{ loan.email }}{% else %}{{ loan.user.email }}{% endif %}
+<br>
 And password: {{password}}
+<br>
 Please login here: <a href="http://app.loanz.io/login/">http://app.loanz.io/login/</a>
+<br>
 Contact us if you have any questions!
 
 {% endblock %}
