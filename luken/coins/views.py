@@ -89,11 +89,12 @@ class CoinAccountViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
         account = get_object_or_404(CoinAccount.objects.all(), pk=pk)
         value_in_usd = get_bitcoin_price() * value_in_btc
 
-        Transaction.objects.create(
-            account=account, type=Transaction.RECEIVED,
-            amount=value_in_btc, value_usd=value_in_usd,
-            address=transaction_hash
-        )
+        Transaction.objects.get_or_create(address=transaction_hash, defaults={
+            'account': account,
+            'type': Transaction.RECEIVED,
+            'amount': value_in_btc,
+            'value_usd': value_in_usd,
+        })
 
         serializer = self.get_serializer(account)
 
