@@ -219,8 +219,8 @@ class Common(Configuration):
             "luken.users.serializers.UserProfileSerializer",
 
         'REGISTER_EMAIL_VERIFICATION_EMAIL_TEMPLATES': {
-            'subject':  'rest_registration/register_email/subject.txt',
-            'body':  'users/register_email.html',
+            'subject': 'rest_registration/register_email/subject.txt',
+            'body': 'users/register_email.html',
         },
 
         'RESET_PASSWORD_VERIFICATION_EMAIL_TEMPLATES': {
@@ -229,8 +229,8 @@ class Common(Configuration):
         },
 
         'REGISTER_VERIFICATION_EMAIL_TEMPLATES': {
-            'subject':  'rest_registration/register/subject.txt',
-            'body':  'users/register.html',
+            'subject': 'rest_registration/register/subject.txt',
+            'body': 'users/register.html',
         },
 
     }
