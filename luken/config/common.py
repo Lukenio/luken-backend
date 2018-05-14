@@ -216,7 +216,23 @@ class Common(Configuration):
         'VERIFICATION_FROM_EMAIL': 'no-reply@example.com',
         "REGISTER_EMAIL_VERIFICATION_URL": "/verify-email/",
         "PROFILE_SERIALIZER_CLASS":
-            "luken.users.serializers.UserProfileSerializer"
+            "luken.users.serializers.UserProfileSerializer",
+
+        'REGISTER_EMAIL_VERIFICATION_EMAIL_TEMPLATES': {
+            'subject':  'rest_registration/register_email/subject.txt',
+            'body':  'users/register_email.html',
+        },
+
+        'RESET_PASSWORD_VERIFICATION_EMAIL_TEMPLATES': {
+            'subject': 'rest_registration/reset_password/subject.txt',
+            'body': 'users/reset_password.html',
+        },
+
+        'REGISTER_VERIFICATION_EMAIL_TEMPLATES': {
+            'subject':  'rest_registration/register/subject.txt',
+            'body':  'users/register.html',
+        },
+
     }
 
     SWAGGER_SETTINGS = {
