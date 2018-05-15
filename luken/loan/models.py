@@ -17,12 +17,15 @@ class LoanApplication(models.Model):
     THREE_MONTH = 0
     SIX_MONTH = 1
     TWELVE_MONTH = 2
+    ONE_MONTH = 3
     TERMS_MONTH_CHOICES = (
+        (ONE_MONTH, "1 Month"),
         (THREE_MONTH, "3 Month"),
         (SIX_MONTH, "6 Month"),
         (TWELVE_MONTH, "12 Month"),
     )
     TERMS_DELTAS = {
+        ONE_MONTH: relativedelta(months=+1),
         THREE_MONTH: relativedelta(months=+3),
         SIX_MONTH: relativedelta(months=+6),
         TWELVE_MONTH: relativedelta(months=+12),
