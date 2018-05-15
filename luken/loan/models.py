@@ -14,22 +14,17 @@ from luken.utils.random import generate_random_string
 
 @reversion.register()
 class LoanApplication(models.Model):
-    THREE_MONTH = 0
-    SIX_MONTH = 1
-    TWELVE_MONTH = 2
-    ONE_MONTH = 3
+    ONE_MONTH = 1
+    THREE_MONTH = 3
+    SIX_MONTH = 6
+    TWELVE_MONTH = 12
+
     TERMS_MONTH_CHOICES = (
         (ONE_MONTH, "1 Month"),
         (THREE_MONTH, "3 Month"),
         (SIX_MONTH, "6 Month"),
         (TWELVE_MONTH, "12 Month"),
     )
-    TERMS_DELTAS = {
-        ONE_MONTH: relativedelta(months=+1),
-        THREE_MONTH: relativedelta(months=+3),
-        SIX_MONTH: relativedelta(months=+6),
-        TWELVE_MONTH: relativedelta(months=+12),
-    }
 
     BITCOIN_TYPE = 0
     ETHEREUM_TYPE = 1
@@ -182,8 +177,7 @@ class LoanApplication(models.Model):
         return self.apr * 100
 
     def get_maturity_date(self):
-        delta = self.TERMS_DELTAS[self.terms_month]
-        return self.created + delta
+        return self.created + relativedelta(months=self.terms_month)
 
 
 models.signals.post_save.connect(LoanApplication.post_save_dispatch, sender=LoanApplication)
