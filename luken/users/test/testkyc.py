@@ -1,4 +1,3 @@
-import json
 import mock
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -27,14 +26,14 @@ storage_mock.url.return_value = '/tmp/test1.jpg'
     "Ethereum": "luken.coins.test.TestBackend"
 })
 class KYCApiTestCase(APITestCase):
-    @mock.patch('django.core.files.storage.default_storage._wrapped', 
-    storage_mock)
+    @mock.patch('django.core.files.storage.default_storage._wrapped',
+                storage_mock)
     def setUp(self):
         self.user = UserFactory()
         self.url = reverse('kyc_form')
         self.client.credentials(
             HTTP_AUTHORIZATION=f'Token {self.user.auth_token}'
-            )
+        )
         self.kyc = models.KYC(user=self.user,
                               user_fullname="John Doe",
                               phone_number="+995598008517",
@@ -66,8 +65,8 @@ class KYCApiTestCase(APITestCase):
         response = self.client.get(self.url, {})
 
         kyc_id = response.json()['results'][0]['id']
-        retrieve_resp = self.client.get(reverse('kyc_form_retrieve', 
-        kwargs={'pk': kyc_id}))
+        retrieve_resp = self.client.get(reverse('kyc_form_retrieve',
+                                                kwargs={'pk': kyc_id}))
 
         eq_(retrieve_resp.status_code, 200)
 
@@ -76,7 +75,8 @@ class KYCApiTestCase(APITestCase):
         response = self.client.get(self.url, {})
 
         kyc_id = response.json()['results'][0]['id']
-        patch_resp = self.client.patch(reverse('kyc_form_retrieve', kwargs={'pk': kyc_id}), 
+        patch_resp = self.client.patch(reverse('kyc_form_retrieve',
+                                       kwargs={'pk': kyc_id}),
                                        data={'city': 'London'},
                                        )
         eq_(patch_resp.status_code, 200)
@@ -86,7 +86,8 @@ class KYCApiTestCase(APITestCase):
         response = self.client.get(self.url, {})
 
         kyc_id = response.json()['results'][0]['id']
-        patch_resp = self.client.delete(reverse('kyc_form_retrieve', kwargs={'pk': kyc_id}), 
+        patch_resp = self.client.delete(reverse('kyc_form_retrieve',
+                                        kwargs={'pk': kyc_id}),
                                         data={'city': 'London'},
                                         )
         eq_(patch_resp.status_code, 204)
