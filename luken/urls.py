@@ -11,6 +11,7 @@ from luken.coins.urls import coins_router
 from luken.loan.urls import loan_router
 
 from luken.users.views import kyc_webhook
+from luken.xpub.views import txhash_webhook
 
 schema_view = get_swagger_view(title='Luken API')
 
@@ -30,6 +31,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api-docs/', schema_view),
     path('jot_form_webhook/', kyc_webhook, name='kyc_webhook'),
+    path("txhash-webhook", txhash_webhook, name="txhash-webhook"),
 
     # the 'api-root' from django rest-frameworks default router
     # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter
