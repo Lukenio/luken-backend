@@ -10,7 +10,7 @@ from rest_framework.authtoken import views
 from luken.coins.urls import coins_router
 from luken.loan.urls import loan_router
 
-from luken.users.views import kyc_webhook
+from luken.users.views import KYCApiView, KYCApiRetrieveView
 
 schema_view = get_swagger_view(title='Luken API')
 
@@ -29,7 +29,8 @@ urlpatterns = [
     path('api/v1/', include(api_urlpatterns)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api-docs/', schema_view),
-    path('jot_form_webhook/', kyc_webhook, name='kyc_webhook'),
+    path('kyc_form/', KYCApiView.as_view(), name='kyc_form'),
+    path('kyc_form/<int:pk>/', KYCApiRetrieveView.as_view(), name='kyc_form_retrieve'),
 
     # the 'api-root' from django rest-frameworks default router
     # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter
