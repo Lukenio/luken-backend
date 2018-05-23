@@ -58,4 +58,3 @@ class KYCSerializer(serializers.ModelSerializer):
     class Meta:
         model = KYC
         fields = '__all__'
-
