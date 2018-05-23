@@ -5,7 +5,6 @@ from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
 from django.utils.encoding import python_2_unicode_compatible
 from django.db.models.signals import post_save
-from django.contrib.postgres.fields import JSONField
 from rest_framework.authtoken.models import Token
 
 
@@ -63,8 +62,6 @@ class KYC(models.Model):
     city = models.CharField(max_length=255)
     state_province = models.CharField(max_length=255)
     postal_zip_code = models.CharField(max_length=15)
-
-
     added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -81,4 +78,3 @@ def modify_user(sender, instance=None, created=False, **kwargs):
     user.first_name = instance.user_fullname.split(" ")[0]
     user.last_name = instance.user_fullname.split(" ")[1]
     user.save()
-
