@@ -80,8 +80,7 @@ class KYCApiTestCase(APITestCase):
         response = self.client.get(self.url, {})
 
         kyc_id = response.json()['results'][0]['id']
-        patch_resp = self.client.delete(reverse('kyc_form_retrieve',
+        delete_resp = self.client.delete(reverse('kyc_form_retrieve',
                                         kwargs={'pk': kyc_id}),
-                                        data={'city': 'London'},
                                         )
-        eq_(patch_resp.status_code, 204)
+        eq_(delete_resp.status_code, 204)
