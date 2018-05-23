@@ -1,16 +1,12 @@
 import mock
-from django.test import TestCase, override_settings
+from django.test import override_settings
 from django.urls import reverse
 from django.forms.models import model_to_dict
 from django.core.files.storage import Storage
 from django.core.files import File
-from django.core.files.uploadedfile import SimpleUploadedFile
 from .factories import UserFactory
-from rest_framework.test import APIRequestFactory
-from rest_framework.test import force_authenticate
 from rest_framework.test import APITestCase
-from nose.tools import ok_, eq_
-from .. import views
+from nose.tools import eq_
 from .. import models
 
 file_mock = mock.MagicMock(spec=File, name='FileMock')
@@ -31,9 +27,7 @@ class KYCApiTestCase(APITestCase):
     def setUp(self):
         self.user = UserFactory()
         self.url = reverse('kyc_form')
-        self.client.credentials(
-            HTTP_AUTHORIZATION=f'Token {self.user.auth_token}'
-        )
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.user.auth_token}')
         self.kyc = models.KYC(user=self.user,
                               user_fullname="John Doe",
                               phone_number="+995598008517",
