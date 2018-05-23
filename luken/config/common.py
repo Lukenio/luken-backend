@@ -252,6 +252,8 @@ class Common(Configuration):
     BLOCKCHAIN_API_KEY = os.getenv("DJANGO_BLOCKCHAIN_API_KEY")
     BLOCKCHAIN_CALLBACK_SECRET = os.getenv("DJANGO_BLOCKCHAIN_CALLBACK_SECRET")
 
+    HELLO_SIGN_API_KEY = os.getenv("DJANGO_HELLO_SIGN_API_KEY")
+
     HOST_URL = os.getenv("DJANGO_HOSTNAME", "http://postb.in/RR1F5NB0")
 
     COIN_BACKENDS = {

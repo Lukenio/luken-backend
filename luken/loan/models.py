@@ -1,4 +1,5 @@
 from dateutil.relativedelta import relativedelta
+import calendar
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -7,9 +8,11 @@ from django.db import models
 from django.template import loader
 
 import reversion
+from django.utils import timezone
 from reversion.models import Version
 
 from luken.utils.random import generate_random_string
+from luken.utils.hello_sign import client
 
 
 @reversion.register()
@@ -124,7 +127,7 @@ class LoanApplication(models.Model):
         text_content = text_template.render(ctx)
         html_content = html_template.render(ctx)
 
-        email = self.email or self.user.email
+        email = self.get_borrower_email()
 
         msg = EmailMultiAlternatives(
             "Crypto Loan Application",
@@ -178,6 +181,55 @@ class LoanApplication(models.Model):
 
     def get_maturity_date(self):
         return self.created + relativedelta(months=self.terms_month)
+
+    def get_borrower_email(self):
+        return self.email or self.user.email
+
+    def sign_contract_with_hello_sign(self):
+        template_id = "0558d2f6c9f02acf7f16422f69582ff72cb810f7"
+        fee = "3%"
+
+        now = timezone.now()
+        _admin_name, admin_email = settings.ADMINS[0]
+        lender_name = "Emedel Holding Inc."
+
+        client.send_signature_request_with_template(
+            test_mode=True,
+            template_id=template_id,
+            title="LOANZ Loan Agreement",
+            subject="LOANZ Loan Agreement",
+            message="Please sign this Loan Agreement. Let me know if you have any questions.",
+            signers=[
+                {"role_name": "Borrower", "email_address": self.get_borrower_email(), "name": "?"},
+                {"role_name": "Lender", "email_address": admin_email, "name": lender_name}
+            ],
+            custom_fields=[
+                {"borrower_name": self.user.get_full_name() if self.user else ""},
+                {"principal_amount": self.loaned_amount},
+                # not sure if I am right to use `apr` here
+                {"interest_rate": self.apr},
+                {"term_of_loan": self.get_terms_month_display()},
+                {"commencement_date": now},
+                {"maturity_date": self.get_maturity_date()},
+                {"type_of_crypto": self.get_crypto_type_display()},
+                {"amount_of_crypto": self.crypto_collateral},
+                {"value_of_crypto": self.crypto_price_usd},
+                {"lenders_fee_apr": self.apr},
+                {"loanz_fee": fee},
+                {"legal_cost": 0},
+                {"net_advance": self.loaned_amount},
+                {"day": now.day},
+                {"month_text": calendar.month_name[now.month]},
+                {"year_2_numbers": now.strftime("%y")},
+                {"loan_amount": self.loaned_amount},
+                {"landing_currency": "USD"},
+                {"principal_interest_text": self.apr},
+                {"borrower_email": self.get_borrower_email()},
+                {"loanz_email": admin_email},
+                {"lender_email": admin_email},
+                {"lender_name": lender_name}
+            ]
+        )
 
 
 models.signals.post_save.connect(LoanApplication.post_save_dispatch, sender=LoanApplication)

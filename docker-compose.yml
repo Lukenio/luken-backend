@@ -10,6 +10,7 @@ services:
       - DJANGO_BLOCKCHAIN_API_KEY=aa85ccb8-c182-4718-8acf-66137ee918e1
       - DJANGO_BLOCKCHAING_XPUB=xpub6CkadEWeosKZXGxkWwyN3JnBZBCahjiY6QdnDuHcxfZTw5ynTxdVeTS4bDazFWsBtoKHeJbSXVDqXH5L91z781ed325d9MycKCM2PBxyQ13
       - DJANGO_BLOCKCHAIN_CALLBACK_SECRET=test-secret
+      - DJANGO_HELLO_SIGN_API_KEY=cd04d003a18d5fab17f8bdbad8f51994affd5441e42ab2a61bb1b3d944a42030
     image: web
     build: ./
     command: >
