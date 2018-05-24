@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import User
+from .models import User, KYC
 from luken.coins.serializers import CoinAccountSerializer
 
 from rest_registration.api.serializers import _get_field_names
@@ -53,3 +53,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
         self.Meta.read_only_fields = read_only_field_names
 
         super().__init__(*args, **kwargs)
+
+class KYCSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KYC
+        fields = '__all__'

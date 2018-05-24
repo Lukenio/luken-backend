@@ -1,14 +1,9 @@
 import logging
-import json
-from rest_framework import viewsets, mixins
-from rest_framework.permissions import AllowAny
+from rest_framework import viewsets, mixins, generics
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import User, KYC
 from .permissions import IsUserOrReadOnly
-from .serializers import CreateUserSerializer, UserSerializer
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
-from django.http import HttpResponse, HttpResponseBadRequest
-from pusher import Pusher
+from .serializers import CreateUserSerializer, UserSerializer, KYCSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -34,24 +29,19 @@ class UserCreateViewSet(mixins.CreateModelMixin,
     serializer_class = CreateUserSerializer
     permission_classes = (AllowAny,)
 
+class KYCApiView(generics.ListCreateAPIView):
+    queryset = KYC.objects.all()
+    serializer_class = KYCSerializer
+    permission_classes = (IsAuthenticated,)
 
-@require_POST
-@csrf_exempt
-def kyc_webhook(request):
-    pusher_client = Pusher.from_env()
-    data = request.POST.dict()
+    def get_queryset(self):
+        return KYC.objects.filter(user=self.request.user)
 
-    if data.get('rawRequest'):
-        data = json.loads(data['rawRequest'])
+class KYCApiRetrieveView(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = 'pk'
+    queryset = KYC.objects.all()
+    serializer_class = KYCSerializer
+    permission_classes = (IsAuthenticated,)
 
-        user_id = data['q15_userid']
-        kyc = KYC.objects.create(jot_form_data=data, user_id=user_id)
-
-        kyc.user.kyc_applied = True
-        kyc.user.save()
-
-        pusher_client.trigger(user_id, 'kyc-done', data)
-
-        return HttpResponse('Ok')
-
-    return HttpResponseBadRequest('bad request')
+    def get_queryset(self):
+        return KYC.objects.filter(user=self.request.user)
