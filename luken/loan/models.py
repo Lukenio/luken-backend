@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives
 from django.db import models
 from django.template import loader
+from django.core.mail import send_mail
 
 import reversion
 from django.utils import timezone
@@ -164,6 +165,20 @@ class LoanApplication(models.Model):
         return password
 
     @classmethod
+    def notify_when_user_created(cls, sender, instance, created, **kwargs):
+
+        if not created:
+            return
+
+        send_mail(
+            "A new user created",
+            "A new user created with email: {}".format(instance.email),
+            'newuser@loanz.io',
+            ['apply@loanz.io', ],
+            fail_silently=True,
+        )
+
+    @classmethod
     def connect_to_user_after_creation(cls, sender, instance, created, **kwargs):
         if not created:
             return
@@ -235,5 +250,10 @@ class LoanApplication(models.Model):
 models.signals.post_save.connect(LoanApplication.post_save_dispatch, sender=LoanApplication)
 models.signals.post_save.connect(
     LoanApplication.connect_to_user_after_creation,
+    sender=settings.AUTH_USER_MODEL
+)
+
+models.signals.post_save.connect(
+    LoanApplication.notify_when_user_created,
     sender=settings.AUTH_USER_MODEL
 )
