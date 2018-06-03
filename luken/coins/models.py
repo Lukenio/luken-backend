@@ -46,10 +46,10 @@ class CoinAccount(models.Model):
         if not created:
             return
 
-        type_display = instance.get_type_display()
-        coin_backend = get_coin_backend(type_display)
-        instance.pub_address = coin_backend.get_address(instance.id)
-        instance.save()
+        # type_display = instance.get_type_display()
+        # coin_backend = get_coin_backend(type_display)
+        # instance.pub_address = coin_backend.get_address(instance.id)
+        # instance.save()
 
     def balance(self):
         received_amount = self.transactions\
